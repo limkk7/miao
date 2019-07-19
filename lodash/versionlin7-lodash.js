@@ -16,9 +16,10 @@ var versionlin7 = {
       map[arguments[i]] = 0
     }
     for(let i = 0; i < ary.length; i++) {
-      if(!(ary[i] in map)){
-        array.push(ary[i])
+      if(ary[i] in map){
+        continue
       }
+      array.push(ary[i])
     }
     return array
   },
