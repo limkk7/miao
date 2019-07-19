@@ -10,18 +10,9 @@ var versionlin7 = {
     return ary.filter(it => it)
   },
   difference: function(ary, ...value) {
-    let array = []
-    let map = {}
-    for(let i = 1; i < arguments.length; i++) {
-      for(let j = 0; j < arguments[i].length; j++) {
-        map[arguments[i][j]] = 0
-      }
-    }
-    for(let i = 0; i < ary.length; i++) {
-      if(ary[i] in map){
-        continue
-      }
-      array.push(ary[i])
+    var array = ary.slice()
+    for (let val of value) {
+        array = array.filter(n => !val.includes(n))
     }
     return array
   },
