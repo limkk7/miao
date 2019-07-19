@@ -13,7 +13,9 @@ var versionlin7 = {
     let array = []
     let map = {}
     for(let i = 1; i < arguments.length; i++) {
-      map[arguments[i]] = 0
+      for(let j = 0; j < arguments[i].length; j++) {
+        map[arguments[i][j]] = 0
+      }
     }
     for(let i = 0; i < ary.length; i++) {
       if(ary[i] in map){
