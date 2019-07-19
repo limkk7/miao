@@ -9,4 +9,17 @@ var versionlin7 = {
   compact: function(ary) {
     return ary.filter(it => it)
   },
+  difference: function(ary, ...value) {
+    let array = []
+    let map = {}
+    for(let i = 1; i < arguments.length; i++) {
+      map[arguments[i]] = 0
+    }
+    for(let i = 0; i < ary.length; i++) {
+      if(!(ary[i] in map)){
+        array.push(ary[i])
+      }
+    }
+    return array
+  },
 }
