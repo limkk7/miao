@@ -28,12 +28,13 @@ var versionlin7 = {
     res = res.filter(n => !ary.includes(n))
     return res
   },
+
   differenceBy: function(array, ...values) {
     let tostring = Object.prototype.toString
     let lastatt = arguments[arguments.length - 1]
+    let ary = []
+    let res = array.slice()
     if(tostring.call(lastatt ) != '[object Array]'){
-      let ary = []
-      let res = array.slice()
       for (let i = 1; i < arguments.length - 1; i++) {
         for(let j = 0; j < arguments[i].length ; j++)
           ary.push(arguments[i][j])
@@ -42,7 +43,6 @@ var versionlin7 = {
         for (let i = 0; i < ary.length; i++) {
           res = res.filter(n => lastatt(n) != lastatt(ary[i]))
         }
-        return res
       }else if(tostring.call(lastatt) == '[object String]') {
         for (let i = 0; i < ary.length; i++) {
           res = res.filter(n => {
@@ -52,14 +52,22 @@ var versionlin7 = {
       }
       return res
     }else {
-      let ary = []
-      let res = array.slice()
-      for (let i = 1; i < arguments.length; i++) {
-        for(let j = 0; j < arguments[i].length ; j++)
-          ary.push(arguments[i][j])
-      }
-      res = res.filter(n => !ary.includes(n))
-      return res
+      return this.difference(array, ...value)
+    }
+  },
+  /**
+   * Creates a slice of array with n elements dropped from the beginning.
+   *
+   * @param   {[Array]}  array  [array The array to query.]
+   * @param   {[Number]}  n      [n The number of elements to drop]
+   *
+   * @return  {[Array]}         [return the slice of array]
+   */
+  drop: function(array, n = 1) {
+    if (n >= array.length) {
+      return []
+    }else {
+      return array.slice(n)
     }
   },
 }
