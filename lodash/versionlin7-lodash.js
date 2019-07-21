@@ -25,7 +25,7 @@ var versionlin7 = {
     }
     return array
   },
-  differenceBy: function(array, ...values, action) {
+  differenceby: function(array, ...values, action) {
     let ary = array.slice()
     for(let val of values) {
       ary = ary.filter(n => !val.includes(action(n)))
