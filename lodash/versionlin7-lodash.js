@@ -86,4 +86,29 @@ var versionlin7 = {
       return array.slice(0, x)
     }
   },
+  isArray: function(value) {
+    return Object.prototype.toString.call(value) == '[object Array]'
+  },
+  isString: function(value) {
+    return Object.prototype.toString.call(value) == '[object String]'
+  },
+  isFunction: function(value) {
+    return Object.prototype.toString.call(value) == '[object Function]'
+  },
+  isNumber: function(value) {
+    return Object.prototype.toString.call(value) == '[object Number]'
+  },
+  isObject: function(value) {
+    return Object.prototype.toString.call(value) == '[object Object]'
+  },
+  isNull: function(value) {
+    return Object.prototype.toString.call(value) == '[object Null]'
+  },
+  isUndefined: function(value) {
+    return value === undefined
+  },
+  isNaN: function(value) {
+    return value.toString() === 'NaN'
+  },
+  
 }
