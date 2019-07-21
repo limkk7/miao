@@ -79,11 +79,11 @@ var versionlin7 = {
    * @return  {Array}         [return the slice of array]
    */
   dropRight: function(array, n = 1) {
-    let n = array.length - n
-    if(n <= 0) {
+    let x = array.length - n
+    if(x <= 0) {
       return []
     } else {
-      return array.slice(0, n)
+      return array.slice(0, x)
     }
   },
 }
