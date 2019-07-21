@@ -46,13 +46,20 @@ var versionlin7 = {
       }else if(tostring.call(lastatt) == '[object String]') {
         for (let i = 0; i < ary.length; i++) {
           res = res.filter(n => {
-            n[lastatt] != ary[i][lastatt]
+            return n[lastatt] != ary[i][lastatt] ? true : false
           })
         }
       }
       return res
     }else {
-      return difference(array, ...value)
+      let ary = []
+      let res = array.slice()
+      for (let i = 1; i < arguments.length; i++) {
+        for(let j = 0; j < arguments[i].length ; j++)
+          ary.push(arguments[i][j])
+      }
+      res = res.filter(n => !ary.includes(n))
+      return res
     }
   },
 }
