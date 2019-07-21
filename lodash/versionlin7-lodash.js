@@ -18,17 +18,41 @@ var versionlin7 = {
    *
    * @return  {Array}            [Returns the new array of filtered values]
    */
-  difference: function(ary, ...value) {
-    var array = ary.slice()
-    for (let val of value) {
-        array = array.filter(n => !val.includes(n))
+  difference: function(array, ...value) {
+    let ary = []
+    let res = array.slice()
+    for (let i = 1; i < arguments.length; i++) {
+      for(let j = 0; j < arguments[i].length ; j++)
+        ary.push(arguments[i][j])
     }
-    return array
+    res = res.filter(n => !ary.includes(n))
+    return res
   },
-  differenceby: function(array, ...values, action) {
-    let ary = array.slice()
-    for(let val of values) {
-      ary = ary.filter(n => !val.includes(action(n)))
+  differenceBy: function(array, ...values) {
+    let tostring = Object.prototype.toString
+    let lastatt = arguments[arguments.length - 1]
+    if(tostring.call(lastatt ) != '[object Array]'){
+      let ary = []
+      let res = array.slice()
+      for (let i = 1; i < arguments.length - 1; i++) {
+        for(let j = 0; j < arguments[i].length ; j++)
+          ary.push(arguments[i][j])
+      }
+      if(tostring.call(lastatt) == '[object Function]'){
+        for (let i = 0; i < ary.length; i++) {
+          res = res.filter(n => lastatt(n) != lastatt(ary[i]))
+        }
+        return res
+      }else if(tostring.call(lastatt) == '[object String]') {
+        for (let i = 0; i < ary.length; i++) {
+          res = res.filter(n => {
+            n[lastatt] != ary[i][lastatt]
+          })
+        }
+      }
+      return res
+    }else {
+      return difference(array, ...value)
     }
   },
 }
