@@ -52,7 +52,7 @@ var versionlin7 = {
       }
       return res
     }else {
-      return this.difference(array, ...value)
+      return this.difference(array, ...values)
     }
   },
   /**
@@ -68,6 +68,22 @@ var versionlin7 = {
       return []
     }else {
       return array.slice(n)
+    }
+  },
+  /**
+   * Creates a slice of array with n elements dropped from the end
+   *
+   * @param   {Array}  array  [array the array to query]
+   * @param   {Number}  n      [n the number of elements to drop]
+   *
+   * @return  {Array}         [return the slice of array]
+   */
+  dropRight: function(array, n = 1) {
+    let n = array.length - n
+    if(n <= 0) {
+      return []
+    } else {
+      return array.slice(0, n)
     }
   },
 }
