@@ -1,4 +1,7 @@
 var versionlin7 = {
+  tostring: function(value){
+    return Object.prototype.toString.call(value)
+  },
   chunk: function(ary, size = 1) {
     let array = []
     for (let i = 0; i < ary.length; i += size){
@@ -30,20 +33,19 @@ var versionlin7 = {
   },
 
   differenceBy: function(array, ...values) {
-    let tostring = Object.prototype.toString
     let lastatt = arguments[arguments.length - 1]
     let ary = []
     let res = array.slice()
-    if(tostring.call(lastatt ) != '[object Array]'){
+    if(this.tostring(lastatt ) != '[object Array]'){
       for (let i = 1; i < arguments.length - 1; i++) {
         for(let j = 0; j < arguments[i].length ; j++)
           ary.push(arguments[i][j])
       }
-      if(tostring.call(lastatt) == '[object Function]'){
+      if(this.tostring(lastatt) == '[object Function]'){
         for (let i = 0; i < ary.length; i++) {
           res = res.filter(n => lastatt(n) != lastatt(ary[i]))
         }
-      }else if(tostring.call(lastatt) == '[object String]') {
+      }else if(this.tostring(lastatt) == '[object String]') {
         for (let i = 0; i < ary.length; i++) {
           res = res.filter(n => {
             return n[lastatt] != ary[i][lastatt] ? true : false
@@ -87,27 +89,29 @@ var versionlin7 = {
     }
   },
   isArray: function(value) {
-    return Object.prototype.toString.call(value) == '[object Array]'
+    return this.tostring(value) == '[object Array]'
   },
   isString: function(value) {
-    return Object.prototype.toString.call(value) == '[object String]'
+    return this.tostring(value) == '[object String]'
   },
   isFunction: function(value) {
-    return Object.prototype.toString.call(value) == '[object Function]'
+    return this.tostring(value) == '[object Function]'
   },
   isNumber: function(value) {
-    return Object.prototype.toString.call(value) == '[object Number]'
+    return this.tostring(value) == '[object Number]'
   },
   isObject: function(value) {
-    return Object.prototype.toString.call(value) == '[object Object]'
+    let type = this.tostring(value)
+    return type != null && (type == '[object Object]' || type == '[object Function]')
   },
   isNull: function(value) {
-    return Object.prototype.toString.call(value) == '[object Null]'
+    return this.tostring(value) == '[object Null]'
   },
   isUndefined: function(value) {
     return value === undefined
   },
   isNaN: function(value) {
+    if(value === undefined) return false
     return value.toString() === 'NaN'
   },
   
