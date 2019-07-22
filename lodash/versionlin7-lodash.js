@@ -32,14 +32,25 @@ var versionlin7 = {
     return res
   },
 
-  differenceBy: function(array, ...values) {
+  differenceWith(array, ...value)  {
+    let lastatt = arguments[arguments.length - 1]
+    let ary = []
+    let res = array.slice()
+    for (let i = 1; i < arguments.length - 1; i++) {
+        ary.push(...arguments[i])
+    }
+      for (let i = 0; i < ary.length; i++) {
+        res = res.filter(n => lastatt(n) != lastatt(ary[i]))
+      }
+  },
+
+  differenceBy: function(array, ...value) {
     let lastatt = arguments[arguments.length - 1]
     let ary = []
     let res = array.slice()
     if(this.tostring(lastatt ) != '[object Array]'){
       for (let i = 1; i < arguments.length - 1; i++) {
-        for(let j = 0; j < arguments[i].length ; j++)
-          ary.push(arguments[i][j])
+          ary.push(...arguments[i])
       }
       if(this.tostring(lastatt) == '[object Function]'){
         for (let i = 0; i < ary.length; i++) {
@@ -54,7 +65,7 @@ var versionlin7 = {
       }
       return res
     }else {
-      return this.difference(array, ...values)
+      return this.difference(array, ...value)
     }
   },
   /**
@@ -101,7 +112,7 @@ var versionlin7 = {
     return this.tostring(value) == '[object Number]'
   },
   isObject: function(value) {
-    let type = this.tostring(value)
+    let type = typeof(value)
     return type != null && (type == '[object Object]' || type == '[object Function]')
   },
   isNull: function(value) {
