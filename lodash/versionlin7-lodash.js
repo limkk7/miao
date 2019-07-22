@@ -40,7 +40,7 @@ var versionlin7 = {
         ary.push(...arguments[i])
     }
     for (let i = 0; i < ary.length; i++) {
-      res = res.filter(n => lastatt(n) != lastatt(ary[i]))
+      res = res.filter(n => !lastatt(n, ary[i]))
     }
     return res
   },
@@ -114,7 +114,7 @@ var versionlin7 = {
   },
   isObject: function(value) {
     let type = typeof(value)
-    return type != null && (type == 'Object' || type == 'Function')
+    return type != null && (type == 'object' || type == 'function')
   },
   isNull: function(value) {
     return this.tostring(value) == '[object Null]'
