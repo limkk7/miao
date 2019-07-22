@@ -39,9 +39,10 @@ var versionlin7 = {
     for (let i = 1; i < arguments.length - 1; i++) {
         ary.push(...arguments[i])
     }
-      for (let i = 0; i < ary.length; i++) {
-        res = res.filter(n => lastatt(n) != lastatt(ary[i]))
-      }
+    for (let i = 0; i < ary.length; i++) {
+      res = res.filter(n => lastatt(n) != lastatt(ary[i]))
+    }
+    return res
   },
 
   differenceBy: function(array, ...value) {
@@ -113,7 +114,7 @@ var versionlin7 = {
   },
   isObject: function(value) {
     let type = typeof(value)
-    return type != null && (type == '[object Object]' || type == '[object Function]')
+    return type != null && (type == 'Object' || type == 'Function')
   },
   isNull: function(value) {
     return this.tostring(value) == '[object Null]'
