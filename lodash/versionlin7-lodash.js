@@ -100,6 +100,54 @@ var versionlin7 = {
       return array.slice(0, x)
     }
   },
+  dropRightWhile: function(array, predicate){
+    return this.reserve(this.dropWhile(this.reverse(array), predicate))
+  },
+  /**
+   * [dropWhile description]
+   *
+   * @param   {[type]}  array      [array description]
+   * @param   {[type]}  predicate  [predicate description]
+   *
+   * @return  {[type]}             [return description]
+   */
+  dropWhile: function(array, predicate) {
+    if(this.isFunction(predicate)){
+      for(let i = 0; i < array.length; i++) {
+        if(!predicate(array[i])){
+          return array.slice(i)
+        }
+      }
+    }
+    if(this.isObject(predicate)) {
+      for(let i = 0; i < array.length; i++) {
+        if(array[i].toString() != predicate.toString()) {
+          return array.slice(i)
+        }
+      }
+    }
+    if(this.isArray(predicate)) {
+      for(let i = 0; i < array.length; i++) {
+        if(!array[i].toString().includes(predicate.toString())){
+          return array.slice(i)
+        }
+      }
+    }
+    if(this.isString(predicate)) {
+      for(let i = 0; i < array.length; i++) {
+        if(array[i][predicate[0]] != predicate[1]){
+          return array.slice(i)
+        }
+      }
+    }
+  },
+  reverse: function(array) {
+    let ary = []
+    for(let i = 0; i < array.length; i++) {
+      ary.push(array[i])
+    }
+    return ary
+  },
   isArray: function(value) {
     return this.tostring(value) == '[object Array]'
   },
@@ -114,7 +162,7 @@ var versionlin7 = {
   },
   isObject: function(value) {
     let type = typeof(value)
-    return type != null && (type == 'object' || type == 'function')
+    return value != null && (type == 'object' || type == 'function')
   },
   isNull: function(value) {
     return this.tostring(value) == '[object Null]'
@@ -123,7 +171,7 @@ var versionlin7 = {
     return value === undefined
   },
   isNaN: function(value) {
-    if(value === undefined) return false
+    if(this.isUndefined(value) || this.isNull(value)) return false
     return value.toString() === 'NaN'
   },
   
