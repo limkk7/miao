@@ -144,7 +144,7 @@ var versionlin7 = {
   },
   reverse: function(array) {
     let ary = []
-    for(let i = array.length -; i >= 0; i--) {
+    for(let i = array.length - 1; i >= 0; i--) {
       ary.push(array[i])
     }
     return ary
