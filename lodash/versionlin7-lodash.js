@@ -142,6 +142,13 @@ var versionlin7 = {
     }
   },
 
+  fill:function(array, value, start = 0, end = array.length){
+    for(let i = start; i < end; i++) {
+      array[i] = value
+    }
+    return array
+  },
+
   reverse: function(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
