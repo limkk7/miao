@@ -133,21 +133,75 @@ var versionlin7 = {
         }
       }
     } 
-    if(this.isObject(predicate)) {
-      let i = array.indexOf(predicate)
-        if(i < 0) {
-          return array.slice(0)
-        }else {
-          return array.slice(i + 1)
+    if(this.isobject(predicate)) {
+      for(let i = 0; i < array.length;i++) {
+        if(!this.objectCompare(array[i], predicate)){
+          return array.slice(i)
         }
+      }
     }
   },
+
   reverse: function(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
       ary.push(array[i])
     }
     return ary
+  },
+  objectCompare: function(obj1, obj2) {
+    let a = Object.keys(obj1)
+    let b = Object.keys(obj2)
+    if(a.length != b.length) {
+      return false;
+    }
+    for(let i = 0; i < a.length; i++) {
+      let t1 = obj1[a[i]]
+      let t2 = obj2[b[i]]
+      //判断键是否相同
+      // if(this.isObject(a[i])){
+      //   if(!this.objectCompare(a[i], b[i])){
+      //     return false
+      //   }
+      // }
+      // if(a[i] != b[i]){
+      //   return false
+      // }
+      if(this.isobject(t1) && this.isobject(t2) ){//isobject只判断对象
+        if(this.objectCompare(t1, t2)) {
+          continue
+        }else {
+          return false;
+        }
+      }else if(this.isFunction(t1) && this.isFunction(t2)) { //isObject 判断数组和函数
+        if(t1.toString() == t2.toString()){
+          continue
+        }else {
+          return false
+        }
+      }else if(this.isArray(t1) && this.isArray(t2)) {//判断数组
+        if(t1.toString() == t2.toString()) {
+          if(t1.toString().includes('[object Object]')) {
+            for(let i = 0; i < t1.length; i++) {
+              if(this.isObject(t1[i])){
+                if(this.objectCompare(t1[i], t2[i])){
+                  continue
+                }else {
+                  return false
+                }
+              }
+            }
+          }
+          continue
+        }else {
+          return false
+        } 
+      }
+      if( a[i] != b[i] || t1 != t2){
+        return false
+      }
+    }
+    return true;
   },
   isArray: function(value) {
     return this.tostring(value) == '[object Array]'
@@ -164,6 +218,9 @@ var versionlin7 = {
   isObject: function(value) {
     let type = typeof(value)
     return value != null && (type == 'object' || type == 'function')
+  },
+  isobject: function(value) {
+    return this.tostring(value) == '[object Object]'
   },
   isNull: function(value) {
     return this.tostring(value) == '[object Null]'
