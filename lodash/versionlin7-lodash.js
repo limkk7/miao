@@ -101,7 +101,7 @@ var versionlin7 = {
     }
   },
   dropRightWhile: function(array, predicate){
-    return this.reserve(this.dropWhile(this.reverse(array), predicate))
+    return this.reverse(this.dropWhile(this.reverse(array), predicate))
   }, 
   /**
    * [dropWhile description]
