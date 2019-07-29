@@ -119,6 +119,20 @@ var versionlin7 = {
         }
       }
     }
+    if(this.isArray(predicate)) {
+      for(let i = 0; i < array.length; i++) {
+        if(array[i][predicate[0]] != predicate[1]){
+          return array.slice(i)
+        }
+      }
+    }
+    if(this.isString(predicate)) {
+      for(let i = 0; i < array.length; i++) {
+        if(!array[i][predicate]){
+          return array.slice(i)
+        }
+      }
+    } 
     if(this.isObject(predicate)) {
       let i = array.indexOf(predicate)
         if(i < 0) {
@@ -127,24 +141,10 @@ var versionlin7 = {
           return array.slice(i + 1)
         }
     }
-    if(this.isString(predicate)) {
-      for(let i = 0; i < array.length; i++) {
-        if(!array[i][predicate]){
-          return array.slice(i)
-        }
-      }
-    }
-    if(this.isArray(predicate)) {
-      for(let i = 0; i < array.length; i++) {
-        if(array[i][predicate[0]] != predicate[1]){
-          return array.slice(i)
-        }
-      }
-    }
   },
   reverse: function(array) {
     let ary = []
-    for(let i = 0; i < array.length; i++) {
+    for(let i = array.length -; i >= 0; i--) {
       ary.push(array[i])
     }
     return ary
