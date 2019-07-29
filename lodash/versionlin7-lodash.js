@@ -102,7 +102,7 @@ var versionlin7 = {
   },
   dropRightWhile: function(array, predicate){
     return this.reserve(this.dropWhile(this.reverse(array), predicate))
-  },
+  }, 
   /**
    * [dropWhile description]
    *
@@ -120,20 +120,21 @@ var versionlin7 = {
       }
     }
     if(this.isObject(predicate)) {
+      let i = array.indexOf(predicate)
+        if(i < 0) {
+          return array.slice(0)
+        }else {
+          return array.slice(i)
+        }
+    }
+    if(this.isString(predicate)) {
       for(let i = 0; i < array.length; i++) {
-        if(array[i].toString() != predicate.toString()) {
+        if(!array[i][predicate]){
           return array.slice(i)
         }
       }
     }
     if(this.isArray(predicate)) {
-      for(let i = 0; i < array.length; i++) {
-        if(!array[i].toString().includes(predicate.toString())){
-          return array.slice(i)
-        }
-      }
-    }
-    if(this.isString(predicate)) {
       for(let i = 0; i < array.length; i++) {
         if(array[i][predicate[0]] != predicate[1]){
           return array.slice(i)
