@@ -149,6 +149,41 @@ var versionlin7 = {
     return array
   },
 
+  findIndex: function(array, predicate = it => it) {
+    switch(this.tostring(predicate)) {
+      case '[object Object]':
+        for(let i = 0; i < array.length; i++) {
+           if(this.objectCompare(array[i], predicate)){
+            return i
+           }
+        }
+        break;
+      case '[object Function]':
+        for(let i = 0; i < array.length; i++) {
+          if(predicate(array[i])) {
+            return i
+          }
+        }
+        break;
+      case '[object String]':
+        for(let i = 0; i < array.length; i++) {
+          if(array[i][predicate] || array[i] == predicate) {
+            return i
+          }
+        }
+        break
+      case '[object Array]':
+        for(let i = 0; i < array.length; i++) {
+          if(array[i][predicate[0]] == predicate[1]) {
+            return i
+          }
+        }
+        break;
+      default:
+        return -1
+    }
+  },
+
   reverse: function(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
