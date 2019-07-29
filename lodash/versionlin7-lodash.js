@@ -149,41 +149,61 @@ var versionlin7 = {
     return array
   },
 
-  findIndex: function(array, predicate = it => it) {
-    switch(this.tostring(predicate)) {
-      case '[object Object]':
-        for(let i = 0; i < array.length; i++) {
-           if(this.objectCompare(array[i], predicate)){
-            return i
-           }
-        }
-        break;
-      case '[object Function]':
-        for(let i = 0; i < array.length; i++) {
-          if(predicate(array[i])) {
-            return i
+  findIndex: function(ary, predicate = it => it, fromIdx = 0) {
+    let array = ary.slice()
+    if(this.isobject(predicate)) {
+      for(let i = fromIdx; i < array.length; i++) {
+          if(this.objectCompare(array[i], predicate)){
+          return i
           }
+      }
+      return -1
+    }else if(this.isFunction(predicate)) {
+      for(let i = fromIdx; i < array.length; i++) {
+        if(predicate(array[i])) {
+          return i
         }
-        break;
-      case '[object String]':
-        for(let i = 0; i < array.length; i++) {
-          if(array[i][predicate] || array[i] == predicate) {
-            return i
-          }
+      }
+      return - 1
+    }else if(this.isArray(predicate)) {
+      for(let i = fromIdx; i < array.length; i++) {
+        if(array[i][predicate[0]] == predicate[1]) {
+          return i
         }
-        break
-      case '[object Array]':
-        for(let i = 0; i < array.length; i++) {
-          if(array[i][predicate[0]] == predicate[1]) {
-            return i
-          }
+      }
+      return -1
+    }else if(this.isString(predicate)) {
+      for(let i = fromIdx; i < array.length; i++) {
+        if(array[i][predicate] || array[i] == predicate) {
+          return i
         }
-        break;
-      default:
-        return -1
+      }
+      return -1
+    }else if(this.isNaN(predicate)){
+      for(let i = fromIdx; i < array.length; i++) {
+        if(this.isNaN(array[i])) {
+          return i
+        }
+      }
+      return -1
+    }else {
+      predicate = this.boolInArray(predicate)
+      for(let i = fromIdx; i < array.length; i++) {
+        array[i] = this.boolInArray(array[i])
+        if(array[i] === predicate) {
+          return i
+        }
+      }
+      return -1
     }
   },
 
+  findLastIndex: function(array, predicate = it => it, fromIdx = array.length - 1) {
+    let j = array.length - 1 - fromIdx
+    let i = this.findIndex(this.reverse(array), predicate, j)
+    return i == -1 ? -1 : array.length - 1 - i
+  },
+  
   reverse: function(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
@@ -245,8 +265,22 @@ var versionlin7 = {
     }
     return true;
   },
+
+  boolInArray: function(value) {
+    if(this.isBoolean(value)) {
+      if(value | 0) {
+        return 'true'
+      }else {
+        return 'false'
+      }
+    }
+    return value
+  },
   isArray: function(value) {
     return this.tostring(value) == '[object Array]'
+  },
+  isBoolean: function(value) {
+    return this.tostring(value) == '[object Boolean]'
   },
   isString: function(value) {
     return this.tostring(value) == '[object String]'
@@ -268,7 +302,7 @@ var versionlin7 = {
     return this.tostring(value) == '[object Null]'
   },
   isUndefined: function(value) {
-    return value === undefined
+    return this.tostring(value) == '[object Undefined]'
   },
   isNaN: function(value) {
     if(this.isUndefined(value) || this.isNull(value)) return false
