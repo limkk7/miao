@@ -124,7 +124,7 @@ var versionlin7 = {
         if(i < 0) {
           return array.slice(0)
         }else {
-          return array.slice(i)
+          return array.slice(i + 1)
         }
     }
     if(this.isString(predicate)) {
