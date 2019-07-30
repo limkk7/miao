@@ -203,7 +203,28 @@ var versionlin7 = {
     let i = this.findIndex(this.reverse(array), predicate, j)
     return i == -1 ? -1 : array.length - 1 - i
   },
-  
+
+  flatten: function(array) {
+    return [].concat(...array)
+  },
+
+  flattenDeep: function(array) {
+    var res = []
+    for(let i = 0; i < array.length; i++) {
+      if(this.isArray(array[i])) {
+        res = res.concat(this.flattenDeep(array[i]))
+      }else {
+        res.push(array[i])
+      }
+    }
+    return res
+  },
+  flattenDepth(array, depth = 1) {
+    for(let i = 0; i < depth; i++) {
+      array = this.flatten(array)
+    }
+    return array
+  },
   reverse: function(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
@@ -211,6 +232,7 @@ var versionlin7 = {
     }
     return ary
   },
+
   objectCompare: function(obj1, obj2) {
     let a = Object.keys(obj1)
     let b = Object.keys(obj2)
@@ -265,7 +287,13 @@ var versionlin7 = {
     }
     return true;
   },
-
+/**
+ * 判断数组中bool类型的值并进行字符串化
+ *
+ * @param   {[type]}  value  [value description]
+ *
+ * @return  {[type]}         [return description]
+ */
   boolInArray: function(value) {
     if(this.isBoolean(value)) {
       if(value | 0) {
