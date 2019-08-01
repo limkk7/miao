@@ -303,6 +303,22 @@ var versionlin7 = {
     }
     return res
   },
+
+  intersectionBy: function(...arrays) {
+    let arrays = Array.from(arguments)
+    let array = arrays.shift()
+    let iteratee = arrays.pop()
+    arrays = [...arrays]
+    if(this.isFunction(iteratee)) {
+      return array.filter((val) => {
+        arrays.map(it => iteratee(it)).includes(iteratee(val)) })
+    }else if(this.isString(iteratee)) {
+      return array.filter((val) => {
+        arrays.map(it => it[iteratee]).includes(val[iteratee]) 
+      })
+    }
+  }
+
   /**
    * 反转数组
    *
