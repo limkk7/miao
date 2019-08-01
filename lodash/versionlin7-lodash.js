@@ -304,23 +304,23 @@ var versionlin7 = {
     return res
   },
 /**
- * 这个方法类似于.交集，但它接受iteratee，它为每个数组的每个元素调用iteratee来生成比较它们的标准。结果值的顺序和引用由第一个数组决定。迭代器使用一个参数调用:(value)。
+ * 这个方法接受iteratee，它为每个数组的每个元素调用iteratee来生成比较它们的标准。结果值的顺序和引用由第一个数组决定。
  *
  * @param   {array}  ...arrays  targer array and compare array and iteratee
  *
  * @return  {array}             new array
  */
   intersectionBy: function(...arrays) {
-    let arrays = Array.from(arguments)
-    let array = arrays.shift()
-    let iteratee = arrays.pop()
-    arrays = [...arrays]
+    let arys = Array.from(arguments)
+    let array = arys.shift()
+    let iteratee = arys.pop()
+    arys = [...arys]
     if(this.isFunction(iteratee)) {
       return array.filter((val) => {
-        arrays.map(it => iteratee(it)).includes(iteratee(val)) })
+        arys.map(it => iteratee(it)).includes(iteratee(val)) })
     }else if(this.isString(iteratee)) {
       return array.filter((val) => {
-        arrays.map(it => it[iteratee]).includes(val[iteratee]) 
+        arys.map(it => it[iteratee]).includes(val[iteratee]) 
       })
     }
   },
