@@ -270,7 +270,7 @@ var versionlin7 = {
           return i
         }
       }
-      return -1
+      return 1
     }
   },
 /**
@@ -284,6 +284,32 @@ var versionlin7 = {
     return array.slice(0, array.length - 1)
   },
 
+  /**
+   * 创建一个包含在所有给定数组中的惟一值的数组，用于相等比较。结果值的顺序和引用由第一个数组决定。
+   *
+   * @param   {[...array]}  ...array  a series array
+   *
+   * @return  {[array]}            new array
+   */
+  intersection: function(...array) {
+    let res = []
+    for(let i = 0; i < arguments[0].length; i++) {
+      for(let j = 1; j < arguments.length; j++) {
+        if(arguments[j].includes(arguments[0][i])) {
+          res.push(arguments[0][i])
+          break;
+        }
+      }
+    }
+    return res
+  },
+  /**
+   * 反转数组
+   *
+   * @param   {[array]}  array  [array description]
+   *
+   * @return  {[array]}         [return new array]
+   */
   reverse: function(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
@@ -346,6 +372,7 @@ var versionlin7 = {
     }
     return true;
   },
+
 /**
  * 判断数组中bool类型的值并进行字符串化
  *
