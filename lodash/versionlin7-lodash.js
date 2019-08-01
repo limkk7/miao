@@ -347,7 +347,7 @@ var versionlin7 = {
     let str = ''
     var i
     for(i = 0; i < array.length - 1; i++) {
-      str += array[i] + separator
+      str += array[i] +''+ separator
     }
     str += array[i]
     return str
