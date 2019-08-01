@@ -2,6 +2,7 @@ var versionlin7 = {
   tostring: function(value){
     return Object.prototype.toString.call(value)
   },
+  //创建一个元素数组，这些元素按大小的长度分成组。如果数组不能被平均分割，最后的块将是剩余的元素。
   chunk: function(ary, size = 1) {
     let array = []
     for (let i = 0; i < ary.length; i += size){
@@ -9,6 +10,7 @@ var versionlin7 = {
     }
     return array
   },
+  //创建一个删除所有falsey值的数组。值false、null、0、""、undefined和NaN是falsey。
   compact: function(ary) {
     return ary.filter(it => it)
   },
@@ -207,7 +209,6 @@ var versionlin7 = {
   flatten: function(array) {
     return [].concat(...array)
   },
-
   flattenDeep: function(array) {
     var res = []
     for(let i = 0; i < array.length; i++) {
@@ -219,11 +220,28 @@ var versionlin7 = {
     }
     return res
   },
-  flattenDepth(array, depth = 1) {
+  flattenDepth: function(array, depth = 1) {
     for(let i = 0; i < depth; i++) {
       array = this.flatten(array)
     }
     return array
+  },
+//为对象创建自己的可枚举字符串keyed-value对数组，该数组可由. frompairs使用。如果对象是映射或集合，则返回其条目。
+  toPairs: function(obj) {
+    let res = []
+    let kary = Object.keys(obj)
+    for(let i = 0; i < kary.length; i++) {
+      res.push([kary[i], obj[kary[i]]])
+    }
+    return res
+  },
+//toPairs的逆函数;返回由键值对组成的对象。
+  fromPairs: function(array) {
+    let obj = {}
+    for(let i = 0; i < array.length; i++) {
+      obj[array[i][0]] = array[i][1]
+    }
+    return obj
   },
   reverse: function(array) {
     let ary = []
