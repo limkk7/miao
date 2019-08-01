@@ -331,7 +331,7 @@ var versionlin7 = {
  * @return  {[type]}             [return description]
  */
   intersectionWith: function(array, ...arrays) {
-    arrays = [].compact(...arrays)
+    arrays = [].concat(...arrays)
     let comparator = arrays.pop()
     return array.filter(val => {
       for(let i = 0; i < arrays.length; i++) {
