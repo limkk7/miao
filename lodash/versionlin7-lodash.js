@@ -322,6 +322,25 @@ var versionlin7 = {
       })
     }
   },
+/**
+ * 类似于_.intersection，接受比较器，比较器被调用以比较数组的元素。结果值的顺序和引用由第一个数组确定。
+ *
+ * @param   {[type]}  array      [array description]
+ * @param   {[type]}  ...arrays  [...arrays description]
+ *
+ * @return  {[type]}             [return description]
+ */
+  intersectionWith: function(array, ...arrays) {
+    arrays = [].compact(...arrays)
+    let comparator = arrays.pop()
+    return array.filter(val => {
+      for(let i = 0; i < arrays.length; i++) {
+        if(comparator(val, arrays[i])){
+          return true;
+        }
+      }
+    })
+  }
 
   /**
    * 反转数组
