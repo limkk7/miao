@@ -137,7 +137,7 @@ var versionlin7 = {
     } 
     if(this.isobject(predicate)) {
       for(let i = 0; i < array.length;i++) {
-        if(!this.objectCompare(array[i], predicate)){
+        if(!this.ObjectCompare(array[i], predicate)){
           return array.slice(i)
         }
       }
@@ -155,7 +155,7 @@ var versionlin7 = {
     let array = ary.slice()
     if(this.isobject(predicate)) {
       for(let i = fromIdx; i < array.length; i++) {
-          if(this.objectCompare(array[i], predicate)){
+          if(this.ObjectCompare(array[i], predicate)){
           return i
           }
       }
@@ -259,14 +259,14 @@ var versionlin7 = {
   indexOf: function(array, value, fromIndex = 0) {
     if(fromIndex >= 0) {
       for(let i = fromIndex; i < array.length; i++) {
-        if(array[i] == value) {
+        if(this.sameValueZero(array[i], value)) {
           return i
         }
       }
       return -1
     }else {
       for(let i = array.length + fromIndex; i >= 0; i--) {
-        if(array[i] == value) {
+        if(this.sameValueZero(array[i], value)) {
           return i
         }
       }
@@ -332,7 +332,7 @@ var versionlin7 = {
  */
   intersectionWith: function(array, ...arrays) {
     arrays = [].concat(...arrays)
-    
+
     let comparator = arrays.pop()
     return array.filter(val => {
       for(let i = 0; i < arrays.length; i++) {
@@ -343,8 +343,44 @@ var versionlin7 = {
     })
   },
 
+  join: function(array, separator = ',') {
+    let str = ''
+    var i
+    for(i = 0; i < array.length - 1; i++) {
+      str += array[i] + separator
+    }
+    str += array[i]
+    return str
+  },
   /**
-   * 反转数组
+   * 获得数组的最后一个元素
+   *
+   * @param   {Array}  array  the array to query
+   *
+   * @return  {*}         last element of array
+   */
+  last:function(array) {
+    return array[array.length - 1]
+  },
+/**
+ * 从后往前扫描数组返回值相等的数组下标
+ *
+ * @param   {array}  array      [array to inspect]
+ * @param   {*}  value      [value to search for]
+ * @param   {number}  fromIndex  [the index to search from]
+ *
+ * @return  {number}             [return index of the matched value, else -1]
+ */
+  lastIndexOf: function(array, value, fromIndex = array.length - 1) {
+    for(let i = fromIndex; i >= 0; i--) {
+      if(this.sameValueZero(array[i], value)){
+        return i
+      }
+    }
+    return -1
+  },
+  /**
+   *反转数组
    *
    * @param   {[array]}  array  [array description]
    *
@@ -357,8 +393,14 @@ var versionlin7 = {
     }
     return ary
   },
-
-  objectCompare: function(obj1, obj2) {
+/**
+ * 对象深对比
+ * @param   {object}  obj1  [obj1 description]
+ * @param   {object}  obj2   [obj description]
+ *
+ * @return  {boolean}        [return description]
+ */
+  ObjectCompare: function(obj1, obj2) {
     let a = Object.keys(obj1)
     let b = Object.keys(obj2)
     if(a.length != b.length) {
@@ -369,15 +411,15 @@ var versionlin7 = {
       let t2 = obj2[b[i]]
       //判断键是否相同
       // if(this.isObject(a[i])){
-      //   if(!this.objectCompare(a[i], b[i])){
+      //   if(!this.ObjectCompare(a[i], b[i])){
       //     return false
       //   }
       // }
-      // if(a[i] != b[i]){
-      //   return false
-      // }
+      if(a[i] != b[i]){
+        return false
+      }
       if(this.isobject(t1) && this.isobject(t2) ){//isobject只判断对象
-        if(this.objectCompare(t1, t2)) {
+        if(this.ObjectCompare(t1, t2)) {
           continue
         }else {
           return false;
@@ -393,7 +435,7 @@ var versionlin7 = {
           if(t1.toString().includes('[object Object]')) {
             for(let i = 0; i < t1.length; i++) {
               if(this.isObject(t1[i])){
-                if(this.objectCompare(t1[i], t2[i])){
+                if(this.ObjectCompare(t1[i], t2[i])){
                   continue
                 }else {
                   return false
@@ -406,13 +448,28 @@ var versionlin7 = {
           return false
         } 
       }
-      if( a[i] != b[i] || t1 != t2){
+      if(t1 != t2){
         return false
       }
     }
     return true;
   },
-
+/**
+ * +-0相等NaN和NaN相等，不同类型不相等；
+ *
+ * @param   {*}  x  [x description]
+ * @param   {*}  y  [y description]
+ *
+ * @return  {boolean}     [return description]
+ */
+  sameValueZero: function(x, y) {
+    if(Object.is(x, y)){//+-0不相等 NaN相等
+      return true
+    }else if(x === y){//NaN不相等 +-0相等
+      return true
+    }
+    return false
+  },
 /**
  * 判断数组中bool类型的值并进行字符串化
  *
