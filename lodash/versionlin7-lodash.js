@@ -310,17 +310,15 @@ var versionlin7 = {
  *
  * @return  {array}             new array
  */
-  intersectionBy: function(...arrays) {
-    let arys = Array.from(arguments)
-    let array = arys.shift()
-    let iteratee = arys.pop()
-    arys = [...arys]
+  intersectionBy: function(array,...arrays) {
+    arrays = [].concat(...arrays)
+    var iteratee = arrays.pop()
     if(this.isFunction(iteratee)) {
       return array.filter((val) => {
-        arys.map(it => iteratee(it)).includes(iteratee(val)) })
+        return arrays.map(it => iteratee(it)).includes(iteratee(val))})
     }else if(this.isString(iteratee)) {
       return array.filter((val) => {
-        arys.map(it => it[iteratee]).includes(val[iteratee]) 
+        return arrays.map(it => it[iteratee]).includes(val[iteratee])
       })
     }
   },
