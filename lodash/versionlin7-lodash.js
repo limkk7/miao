@@ -243,6 +243,47 @@ var versionlin7 = {
     }
     return obj
   },
+
+  head: function(array) {
+    return array[0]
+  },
+/**
+ *获取数组中第一次出现值的索引，该索引使用SameValueZero进行相等比较。如果fromIndex是负数，则它用作数组末尾的偏移量。
+ *
+ * @param   {Array}  array      [target array]
+ * @param   {number}  value      [search target value]
+ * @param   {number}  fromIndex  [start index]
+ *
+ * @return  {number}             return index
+ */
+  indexOf: function(array, value, fromIndex = 0) {
+    if(fromIndex >= 0) {
+      for(let i = fromIndex; i < array.length; i++) {
+        if(array[i] == value) {
+          return i
+        }
+      }
+      return -1
+    }else {
+      for(let i = array.length + fromIndex; i >= 0; i--) {
+        if(array[i] == value) {
+          return i
+        }
+      }
+      return -1
+    }
+  },
+/**
+ * 获取数组中除最后一个元素外的所有元素。
+ *
+ * @param   {[type]}  array  [target array]
+ *
+ * @return  {[type]}         [return new array]
+ */
+  initial: function(array) {
+    return array.slice(0, array.length - 1)
+  },
+
   reverse: function(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
