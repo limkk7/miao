@@ -462,7 +462,15 @@ var versionlin7 = {
     }
     return array
   },
-
+/**
+ * 对array和value调用comparator进行比较，相等则删除array中对应的元素
+ *
+ * @param   {array}  array       array to modify
+ * @param   {array}  value       value to remove
+ * @param   {function}  comparator  function
+ *
+ * @return  {array}              return array
+ */
   pullAllWith: function(array, value, comparator) {
     for(let i = 0; i < array.length; ) {
       let flag = false
@@ -494,6 +502,24 @@ var versionlin7 = {
       ary.push(array[i])
     }
     return ary
+  },
+/**
+ * 向一个有序数组中插入一个value，返回这个值插入之后的有序位置。（使用二分查找）
+ *
+ * @param   {array}  array  [ The sorted array to inspect.]
+ * @param   {*}  value  [target value]
+ *
+ * @return  {number}         [Returns the index at which value should be inserted into array.]
+ */
+  sortedIndex: function(array, value) {
+    let left = 0, right = array.length
+    while (left < right) {
+      let mid = left + Math.floor((right - left) / 2)
+      if (array[mid] == value) return mid
+      else if (array[mid] < value) left = mid + 1
+      else right = mid;
+    }
+    return right;
   },
 /**
  * 对象深对比
