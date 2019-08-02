@@ -515,8 +515,7 @@ var versionlin7 = {
     let left = 0, right = array.length
     while (left < right) {
       let mid = left + Math.floor((right - left) / 2)
-      if (array[mid] == value) return mid
-      else if (array[mid] < value) left = mid + 1
+      if (array[mid] < value) left = mid + 1
       else right = mid;
     }
     return right;
