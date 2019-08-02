@@ -379,6 +379,52 @@ var versionlin7 = {
     }
     return -1
   },
+//返回数组第n个值
+  nth: function(array, n = 0) {
+    if(n >= 0) {
+      return array[n]
+    }else {
+      return array[array.length + n]
+    }
+  },
+  /**
+   * 移除数组中与给定值相同的元素后，修改原数组返回
+   *
+   * @param   {array}  array      array to modify
+   * @param   {...*}  ...values  values to remove
+   *
+   * @return  {array}             returns array
+   */
+  pull: function(array, ...values) {
+    for(let i = 0; i < array.length; ) {
+      if(values.includes(array[i])){
+        this.arySwap(array, i, array.length - 1)
+        array.pop()
+      }else {
+        i++
+      }
+    }
+    return array
+  },
+  /**
+   * 移除数组中与给定数组中相同的元素后，修改原数组返回
+   *
+   * @param   {array}  array  [array to modify]
+   * @param   {array}  value  [value to remove]
+   *
+   * @return  {array}         [return array]
+   */
+  pullAll: function(array, value = []) {
+    for(let i = 0; i < array.length;) {
+      if(value.includes(array[i])) {
+        this.arySwap(array, i, array.length - 1)
+        array.pop()
+      }else {
+        i++
+      }
+    }
+    return array
+  },
   /**
    *反转数组
    *
@@ -469,6 +515,12 @@ var versionlin7 = {
       return true
     }
     return false
+  },
+  //数组值交换
+  arySwap: function(ary, a, b) {
+    let tmp = ary[a]
+    ary [a] = ary[b]
+    ary[b] = tmp
   },
 /**
  * 判断数组中bool类型的值并进行字符串化
