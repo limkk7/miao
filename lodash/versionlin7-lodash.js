@@ -462,6 +462,25 @@ var versionlin7 = {
     }
     return array
   },
+
+  pullAllWith: function(array, value, comparator) {
+    for(let i = 0; i < array.length; ) {
+      let flag = false
+      for(let v of value) {
+        if(comparator(array[i], v)){
+          array.splice(i, 1)
+          flag = true
+          break;
+        }
+      }
+      if(flag) {
+        continue
+      }else {
+        i++
+      }
+    }
+    return array
+  },
   /**
    *反转数组
    *
