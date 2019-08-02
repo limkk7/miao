@@ -426,6 +426,43 @@ var versionlin7 = {
     return array
   },
   /**
+   * 筛选留下array和value中含有iteratee属性的对象元素，然后去除array中与value相同属性值的元素
+   * 对象数组中的指定对象，返回修改后的数组
+   *不修改value数组
+   * @param   {array[object]}  array     array to modify
+   * @param   {array[object]}  value     value to remove
+   * @param   {string}  iteratee  [target object elements]
+   *
+   * @return  {array}            [return array]
+   */
+  pullAllBy: function(array, value, iteratee) {
+    if(!array || !value) {
+      return array
+    }
+    let val = value.filter(val => val.hasOwnProperty(iteratee))//筛选出含有iteratee属性的对象数组
+    for(let i = 0; i < array.length;) {
+      var flag = false
+      if(!array[i].hasOwnProperty(iteratee)){//不含有iteratee属性的对象删除
+        this.arySwap(array, i, array.length - 1)
+        array.pop()
+        continue
+      }
+      for(let v of val) {//比较array和value中的属性值，相同则删除
+        if(this.sameValueZero(array[i][iteratee], v[iteratee])){
+          array.splice(i, 1)
+          flag = true
+          break
+        }
+      }
+      if(flag) {
+        continue
+      }else {
+        i++
+      }
+    }
+    return array
+  },
+  /**
    *反转数组
    *
    * @param   {[array]}  array  [array description]
