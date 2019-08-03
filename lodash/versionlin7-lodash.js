@@ -114,34 +114,8 @@ var versionlin7 = {
    * @return  {[type]}             [return description]
    */
   dropWhile: function(array, predicate) {
-    if(this.isFunction(predicate)){
-      for(let i = 0; i < array.length; i++) {
-        if(!predicate(array[i])){
-          return array.slice(i)
-        }
-      }
-    }
-    if(this.isArray(predicate)) {
-      for(let i = 0; i < array.length; i++) {
-        if(array[i][predicate[0]] != predicate[1]){
-          return array.slice(i)
-        }
-      }
-    }
-    if(this.isString(predicate)) {
-      for(let i = 0; i < array.length; i++) {
-        if(!array[i][predicate]){
-          return array.slice(i)
-        }
-      }
-    } 
-    if(this.isobject(predicate)) {
-      for(let i = 0; i < array.length;i++) {
-        if(!this.ObjectCompare(array[i], predicate)){
-          return array.slice(i)
-        }
-      }
-    }
+    let i = this.isPredicate(array, predicate)
+    return array.slice(i)
   },
 
   fill:function(array, value, start = 0, end = array.length){
@@ -602,6 +576,49 @@ var versionlin7 = {
     }
     return this.sameValueZero(array[right - 1], value) ? right - 1 : -1
   },
+  /**
+   * 返回新的去重有序数组，使用sameValueZero验证
+   *
+   * @param   {array}  array  [array to inspect]
+   *
+   * @return  {array}         [return new duplicate free array]
+   */
+  sortedUniq: function(array) {
+    let res = [array[0]]
+    for(let i = 1; i < array.length; i++) {
+      if(!this.sameValueZero(array[i], array[i - 1])){
+        res.push(array[i])
+      }
+    }
+    return res
+  },
+  sortedUniqBy: function(array, iteratee) {
+    let res = [array[0]]
+    for(let i = 1; i < array.length; i++) {
+      if(!this.sameValueZero(iteratee(array[i - 1]), iteratee(array[i]))){
+        res.push(array[i])
+      }
+    }
+    return res
+  },
+  tail: function(array) {
+    return array.slice(1)
+  },
+  take: function(array, n = 1) {
+    return array.slice(0, n)
+  },
+  takeRight: function(array, n = 1) {
+    if(n >= array.length) return array.slice()
+    return array.slice(array.length - n)
+  },
+  //从array开头开始分割数组，不过是通过predicate控制，直到返回falsey停止。
+  takeRightWhile: function(array, predicate) {
+    return this.reverse(this.takeWhile(this.reverse(array), predicate))
+  },
+  takeWhile: function(array, predicate) {
+    let i = this.isPredicate(array, predicate)
+    return array.slice(0, i)
+  },
 /**
  * 对象深对比
  * @param   {object}  obj1  [obj1 description]
@@ -678,6 +695,37 @@ var versionlin7 = {
       return true
     }
     return false
+  },
+  isPredicate: function(array, predicate) {
+      if(this.isFunction(predicate)){
+        for(let i = 0; i < array.length; i++) {
+          if(!predicate(array[i])){
+            return i
+          }
+        }
+      }
+      if(this.isArray(predicate)) {
+        for(let i = 0; i < array.length; i++) {
+          if(array[i][predicate[0]] != predicate[1]){
+            return i
+          }
+        }
+      }
+      if(this.isString(predicate)) {
+        for(let i = 0; i < array.length; i++) {
+          if(!array[i][predicate]){
+            return i
+          }
+        }
+      } 
+      if(this.isobject(predicate)) {
+        for(let i = 0; i < array.length;i++) {
+          if(!this.ObjectCompare(array[i], predicate)){
+            return i
+          }
+        }
+      }
+      return array.length
   },
   //数组值交换
   arySwap: function(ary, a, b) {
