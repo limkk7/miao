@@ -505,7 +505,7 @@ var versionlin7 = {
   },
 /**
  * 向一个有序数组中插入一个value，返回这个值插入之后的有序位置。（使用二分查找）
- *
+ *不修改原数组
  * @param   {array}  array  [ The sorted array to inspect.]
  * @param   {*}  value  [target value]
  *
@@ -520,6 +520,88 @@ var versionlin7 = {
     }
     return right;
   },
+/**
+ * 迭代器iteratee迭代每个元素值计算它们的值
+ * 这个迭代器调用一个参数value。返回应该被插入后的数组下标。使用二分查找
+ *
+ * @param   {array}  array     [array description]
+ * @param   {*}  value     [value description]
+ * @param   {function}  iteratee  [iteratee description]
+ *
+ * @return  {number}            [Returns the index at which value should be inserted into array.]
+ */
+  sortedIndexBy: function(array, value, iteratee) {
+    let left = 0, right = array.length
+    if(this.isFunction(iteratee)) {
+      while(left < right) {
+        let mid = left + Math.floor((right - left) / 2)
+        if(iteratee(array[mid]) < iteratee(value)) left = mid + 1
+        else right = mid
+      }
+      return right
+    }else if(this.isString(iteratee)){
+      while(left < right) {
+        let mid = left + Math.floor((right - left) / 2)
+        if(array[mid][iteratee] < value[iteratee]) left = mid + 1
+        else right = mid
+      }
+      return right
+    }
+  },
+  /**
+   * 在有序数组中使用二分查找目标值
+   * 带indexOf的都采用sameValueZero比较
+   *
+   * @param   {array}  array  [sorted array to inspect]
+   * @param   {*}  value  [value to search for]
+   *
+   * @return  {[number]}         [return the index of the matched value, else -1]
+   */
+  sortedIndexOf: function(array, value) {
+    let left = 0, right = array.length;
+    while(left < right) {
+      let mid = left + Math.floor((right - left) / 2)
+      if(array[mid] < value) left = mid + 1
+      else right = mid
+    }
+    return this.sameValueZero(array[right], value) ? right : -1
+  },
+  sortedLastIndex: function(array, value) {
+    let left = 0, right = array.length;
+    while(left < right) {
+      let mid = left + Math.floor((right - left) / 2)
+      if(array[mid] <= value) left = mid + 1
+      else right = mid
+    }
+    return right
+  },
+  sortedLastIndexBy: function(array, value, iteratee) {
+    let left = 0, right = array.length;
+    if(this.isFunction(iteratee)){
+      while(left < right) {
+        let mid = left + Math.floor((right - left) / 2)
+        if(iteratee(array[mid]) <= iteratee(value)) left = mid + 1
+        else right = mid
+      }
+      return right
+    }else if(this.isString(iteratee)){
+      while(left < right) {
+        let mid = left + Math.floor((right - left) / 2)
+        if(array[mid][iteratee] <= value[iteratee]) left = mid + 1
+        else right = mid
+      }
+      return right
+    }
+  },
+  sortedLastIndexOf: function(array, value) {
+    let left = 0, right = array.length;
+    while(left < right) {
+      let mid = left + Math.floor((right - left) / 2);
+      if(array[mid] <= value) left = mid + 1
+      else right = mid
+    }
+    return this.sameValueZero(array[right], value) ? right : -1
+  }
 /**
  * 对象深对比
  * @param   {object}  obj1  [obj1 description]
