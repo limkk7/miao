@@ -601,7 +601,7 @@ var versionlin7 = {
       else right = mid
     }
     return this.sameValueZero(array[right], value) ? right : -1
-  }
+  },
 /**
  * 对象深对比
  * @param   {object}  obj1  [obj1 description]
