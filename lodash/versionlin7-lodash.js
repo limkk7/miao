@@ -600,7 +600,7 @@ var versionlin7 = {
       if(array[mid] <= value) left = mid + 1
       else right = mid
     }
-    return this.sameValueZero(array[right], value) ? right : -1
+    return this.sameValueZero(array[right - 1], value) ? right : -1
   },
 /**
  * 对象深对比
