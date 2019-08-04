@@ -713,6 +713,55 @@ var versionlin7 = {
     }
     return res
   },
+  unzip: function(array) {
+    let maxLen = 0
+    let res = []
+    for(let val of array) {
+      if(val.length > maxLen) {
+        maxLen = val.length
+      }
+    }
+    for(let i = 0; i < maxLen; i++) {
+      res.push([])
+      for(let j = 0; j < maxLen; j++) {
+        res[i].push(array[j][i])
+      }
+    }
+    return res
+  },
+  /**
+   * zip(['a'], [1,3,4], [true, false]);
+   * return [["a", 1, true], [undefined, 3, false], [undefined, 4, undefined]]
+   *
+   * @param   {...array}  ...array  [...array description]
+   *
+   * @return  {[...array]}            [return description]
+   */
+  zip: function(...array) {
+    let res = []
+    let maxLen = array[0].length
+    for(let val of array) {
+      if(val.length > maxLen){
+        maxLen = val.length
+      }
+    }
+    // let res = new Array(maxLen).fill([])当fill的是对象时修改一个改变全部
+    for(let i = 0; i < array.length; i++) {
+      for(let j = 0; j < maxLen; j++){
+        if(res[j] == undefined) {
+          res.push([])
+        }
+        res[j].push(array[i][j])
+      }
+    }
+    // for(let i = 0; i < maxLen; i++) {
+    //   res.push([])
+    //   for(let j = 0; j < maxLen; j++) {
+    //     res[i].push(array[j][i])
+    //   }
+    // }
+    return res
+  },
 /**
  * 对象深对比
  * @param   {object}  obj1  [obj1 description]
