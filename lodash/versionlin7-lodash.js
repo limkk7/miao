@@ -14,6 +14,7 @@ var versionlin7 = {
   compact: function(ary) {
     return ary.filter(it => it)
   },
+  //带With和By的函数重写
   /**
    * [difference description]
    *Creates an array of `array` values not included in *the other given arrays
@@ -618,6 +619,99 @@ var versionlin7 = {
   takeWhile: function(array, predicate) {
     let i = this.isPredicate(array, predicate)
     return array.slice(0, i)
+  },
+  /**
+   * 将多个数组中的值进行去重放入新的数组中
+   * 
+   *
+   * @param   {...array}  ...array  the arrays to inspect
+   *
+   * @return  {array}            return the new array of combined values
+   */
+  union: function(...array) {
+    return Array.from(new Set([].concat(...array)))
+  },
+  unionBy: function(...array) {
+    let iteratee = array.pop()
+    array = [].concat(...array)
+    let set = new Set()
+    let res = []
+    if(this.isFunction(iteratee)) {
+      for(let val of array) {
+        if(!set.has(iteratee(val))){
+          set.add(iteratee(val))
+          res.push(val)
+        }
+      }
+    }else if(this.isString(iteratee)) {
+      for(let val of array) {
+        if(!set.has(val[iteratee])) {
+          set.add(val[iteratee])
+          res.push(iteratee)
+        }
+      }
+    }
+    return res
+  },
+  unionWith: function(...array) {
+    let comparator = array.pop()
+    array = [].concat(...array)
+    let res = []
+    for(let i = 0; i < array.length; i++) {
+      let flag = true
+      for(let val of res) {
+        if(comparator(val, array[i])){
+          flag = false
+          break
+        }
+      }
+      if(flag) res.push(array[i])
+    }
+    return res
+  },
+  //根据sameValueZero进行数组去重
+  uniq: function(array) {
+    let res = []
+    for(let i = 0; i < array.length; i++) {
+      if(!res.includes(array[i])) {
+        res.push(array[i])
+      }
+    }
+    return res
+  },
+  uniqBy:function(array, iteratee) {
+    let set = new Set()
+    let res = []
+    if(this.isFunction(iteratee)) {
+      for(let val of array) {
+        if(!set.has(iteratee(val))){
+          set.add(iteratee(val))
+          res.push(val)
+        }
+      }
+    }else if(this.isString(iteratee)) {
+      for(let val of array) {
+        if(!set.has(val[iteratee])) {
+          set.add(val[iteratee])
+          res.push(iteratee)
+        }
+      }
+    }
+    return res
+  },
+  uniqWith:function(array, comparator) {
+    let res = []
+    for(let i = 0; i < array.length; i++) {
+      let flag = true
+      for(let val of res) {
+        if(comparator(val, array[i])){
+          flag = false
+          break
+        }
+      }
+      if(flag) res.push(array[i])
+    }
+    return res
   },
 /**
  * 对象深对比
