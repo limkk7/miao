@@ -714,21 +714,22 @@ var versionlin7 = {
     return res
   },
   unzip: function(array) {
-    // let maxLen = 0
-    // let res = []
-    // for(let val of array) {
-    //   if(val.length > maxLen) {
-    //     maxLen = val.length
-    //   }
-    // }
-    // for(let i = 0; i < maxLen; i++) {
-    //   res.push([])
-    //   for(let j = 0; j < maxLen; j++) {
-    //     res[i].push(array[j][i])
-    //   }
-    // }
-    // return res
-    return this.zip(...array)
+    if(arguments.length > 1) return []
+    let maxLen = 0
+    let res = []
+    for(let val of array) {
+      if(val.length > maxLen) {
+        maxLen = val.length
+      }
+    }
+    for(let i = 0; i < maxLen; i++) {
+      res.push([])
+      for(let j = 0; j < array.length; j++) {
+        res[i].push(array[j][i])
+      }
+    }
+    return res
+    // return this.zip(...array)
   },
   /**
    * zip(['a'], [1,3,4], [true, false]);
@@ -755,12 +756,6 @@ var versionlin7 = {
         res[j].push(array[i][j])
       }
     }
-    // for(let i = 0; i < maxLen; i++) {
-    //   res.push([])
-    //   for(let j = 0; j < maxLen; j++) {
-    //     res[i].push(array[j][i])
-    //   }
-    // }
     return res
   },
 /**
