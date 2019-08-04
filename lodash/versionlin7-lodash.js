@@ -714,20 +714,21 @@ var versionlin7 = {
     return res
   },
   unzip: function(array) {
-    let maxLen = 0
-    let res = []
-    for(let val of array) {
-      if(val.length > maxLen) {
-        maxLen = val.length
-      }
-    }
-    for(let i = 0; i < maxLen; i++) {
-      res.push([])
-      for(let j = 0; j < maxLen; j++) {
-        res[i].push(array[j][i])
-      }
-    }
-    return res
+    // let maxLen = 0
+    // let res = []
+    // for(let val of array) {
+    //   if(val.length > maxLen) {
+    //     maxLen = val.length
+    //   }
+    // }
+    // for(let i = 0; i < maxLen; i++) {
+    //   res.push([])
+    //   for(let j = 0; j < maxLen; j++) {
+    //     res[i].push(array[j][i])
+    //   }
+    // }
+    // return res
+    return this.zip(...array)
   },
   /**
    * zip(['a'], [1,3,4], [true, false]);
