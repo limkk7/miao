@@ -647,7 +647,7 @@ var versionlin7 = {
       for(let val of array) {
         if(!set.has(val[iteratee])) {
           set.add(val[iteratee])
-          res.push(iteratee)
+          res.push(val)
         }
       }
     }
@@ -693,7 +693,7 @@ var versionlin7 = {
       for(let val of array) {
         if(!set.has(val[iteratee])) {
           set.add(val[iteratee])
-          res.push(iteratee)
+          res.push(val)
         }
       }
     }
