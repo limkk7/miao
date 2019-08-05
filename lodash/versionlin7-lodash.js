@@ -731,6 +731,28 @@ var versionlin7 = {
     return res
     // return this.zip(...array)
   },
+  unzipWith: function(array, iteratee) {
+    if(!isFunction(iteratee)){
+      return unzip(array)
+    }
+    let res = []
+    let maxLen = array[0].length
+    for(let val of array) {
+      if(val.length > maxLen){
+        maxLen = val.length
+      }
+    }
+    for(let i = 0; i < maxLen; i++) {
+      let a = iteratee
+      for(let j = 0; j < array.length; j++) {
+        let x = array[j][i]
+        if(!x) x = 0
+        a = a.bind(null, x) 
+      }
+      res.push(a())
+    }
+    return res
+  },
   /**
    * zip(['a'], [1,3,4], [true, false]);
    * return [["a", 1, true], [undefined, 3, false], [undefined, 4, undefined]]
@@ -755,6 +777,21 @@ var versionlin7 = {
         }
         res[j].push(array[i][j])
       }
+    }
+    return res
+  },
+  zipWith: function(...array) {
+    if(!this.isFunction(array[array.length -1])) {
+      return this.zip(...array)
+    }
+    let iteratee = array.pop()
+    let res = []
+    for(let i = 0; i < array[0].length; i++) {
+      let a = iteratee
+      for(let j = 0; j < array.length; j++) {
+        a = a.bind(null, array[j][i]) 
+      }
+      res.push(a())
     }
     return res
   },
