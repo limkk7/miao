@@ -50,8 +50,10 @@ var versionlin7 = {
     return res
   },
 
-  differenceBy: function(array, value, predicate) {
+  differenceBy: function(array, ...value) {
+    let predicate = value.pop()
     predicate = this.iteratee(predicate)
+    value = [].concat(...value)
     let res = []
     for(let ary of array) {
       let flag = true
@@ -808,9 +810,18 @@ var versionlin7 = {
   },
   //获得对象目标深度的值
   get: function(obj, Path, defaultValue = null) {
+    if(this.isArray(Path)){
+      for(let p of Path){
+        if(this.isUndefined(obj)){
+          return defaultValue
+        }
+        obj = obj[p]
+      }
+      return obj
+    }
     let path = this.toPath(Path)
     for(let i = 0; i < path.length; i++) {
-      if(this.isUndefined(defaultValue)){
+      if(this.isUndefined(obj)){
         return defaultValue
       }
       obj = obj[path[i]]
@@ -916,10 +927,7 @@ var versionlin7 = {
     }
     for(let i = 0; i < a.length; i++) {
       let t1 = obj1[a[i]]
-      let t2 = obj2[b[i]]
-      if(a[i] != b[i]){
-        return false
-      }
+      let t2 = obj2[a[i]]
       if(this.isFunction(t1) && this.isFunction(t2)){
         if(t1.toString() == t2.toString()){
           continue
