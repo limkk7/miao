@@ -35,42 +35,35 @@ var versionlin7 = {
     return res
   },
 
-  differenceWith(array, ...value)  {
-    let lastatt = arguments[arguments.length - 1]
-    let ary = []
-    let res = array.slice()
-    for (let i = 1; i < arguments.length - 1; i++) {
-        ary.push(...arguments[i])
-    }
-    for (let i = 0; i < ary.length; i++) {
-      res = res.filter(n => !lastatt(n, ary[i]))
+  differenceWith(array, value, comparator)  {
+    let res = []
+    for(let ary of array) {
+      let flag = true
+      for(let val of value) {
+        if(comparator.call(this, ary, val)) {
+          flag = false
+          break
+        }
+      }
+      if(flag) res.push(ary)
     }
     return res
   },
 
-  differenceBy: function(array, ...value) {
-    let lastatt = arguments[arguments.length - 1]
-    let ary = []
-    let res = array.slice()
-    if(this.tostring(lastatt ) != '[object Array]'){
-      for (let i = 1; i < arguments.length - 1; i++) {
-          ary.push(...arguments[i])
-      }
-      if(this.tostring(lastatt) == '[object Function]'){
-        for (let i = 0; i < ary.length; i++) {
-          res = res.filter(n => lastatt(n) != lastatt(ary[i]))
-        }
-      }else if(this.tostring(lastatt) == '[object String]') {
-        for (let i = 0; i < ary.length; i++) {
-          res = res.filter(n => {
-            return n[lastatt] != ary[i][lastatt] ? true : false
-          })
+  differenceBy: function(array, value, predicate) {
+    predicate = this.iteratee(predicate)
+    let res = []
+    for(let ary of array) {
+      let flag = true
+      for(let val of value) {
+        if(this.sameValueZero(predicate(ary), predicate(val))){
+          flag = false
+          break
         }
       }
-      return res
-    }else {
-      return this.difference(array, ...value)
+      if(flag) res.push(ary)
     }
+    return res
   },
   /**
    * Creates a slice of array with n elements dropped from the beginning.
@@ -115,8 +108,13 @@ var versionlin7 = {
    * @return  {[type]}             [return description]
    */
   dropWhile: function(array, predicate) {
-    let i = this.isPredicate(array, predicate)
-    return array.slice(i)
+    predicate = this.iteratee(predicate)
+    for(let i = 0; i < array.length; i++) {
+      if(!predicate(array[i])){
+        return array.slice(i)
+      }
+    }
+    return array.slice(0)
   },
 
   fill:function(array, value, start = 0, end = array.length){
@@ -201,12 +199,12 @@ var versionlin7 = {
     }
     return array
   },
-//为对象创建自己的可枚举字符串keyed-value对数组，该数组可由. frompairs使用。如果对象是映射或集合，则返回其条目。
+//为对象创建自己的可枚举字符串keyed-value对数己的可枚举字符串keyed-value对数组，该数组可由. frompairs使用。如果对象是映射或集合，则返回其条目。
   toPairs: function(obj) {
     let res = []
-    let kary = Object.keys(obj)
-    for(let i = 0; i < kary.length; i++) {
-      res.push([kary[i], obj[kary[i]]])
+    let key = Object.keys(obj)
+    for(let i = 0; i < key.length; i++) {
+      res.push([key[i], obj[key[i]]])
     }
     return res
   },
@@ -617,8 +615,13 @@ var versionlin7 = {
     return this.reverse(this.takeWhile(this.reverse(array), predicate))
   },
   takeWhile: function(array, predicate) {
-    let i = this.isPredicate(array, predicate)
-    return array.slice(0, i)
+    predicate = this.iteratee(predicate)
+    for(let i = 0; i < array.length; i++) {
+      if(!predicate(array[i])){
+        return array.slice(0, i)
+      }
+    }
+    return array.slice(0)
   },
   /**
    * 将多个数组中的值进行去重放入新的数组中
@@ -732,7 +735,7 @@ var versionlin7 = {
     // return this.zip(...array)
   },
   unzipWith: function(array, iteratee) {
-    if(!isFunction(iteratee)){
+    if(!this.isFunction(iteratee)){
       return unzip(array)
     }
     let res = []
@@ -746,7 +749,7 @@ var versionlin7 = {
       let a = iteratee
       for(let j = 0; j < array.length; j++) {
         let x = array[j][i]
-        if(!x) x = 0
+        if(x == undefined) x = 0
         a = a.bind(null, x) 
       }
       res.push(a())
@@ -795,6 +798,109 @@ var versionlin7 = {
     }
     return res
   },
+  //Util############################################################################################
+  curry: function() {
+
+  },
+  //将对象路径字符串转为数组
+  toPath: function(str) {
+    return str.split(/\.|\[|\]./g)
+  },
+  //获得对象目标深度的值
+  get: function(obj, Path, defaultValue = null) {
+    let path = this.toPath(Path)
+    for(let i = 0; i < path.length; i++) {
+      if(this.isUndefined(defaultValue)){
+        return defaultValue
+      }
+      obj = obj[path[i]]
+    }
+    return obj
+  },
+  matchesProperty: function(Path, value) {
+    return (obj) => {
+      return this.isEqual(this.get(obj, Path), value)
+    }
+  },
+  Property: function(Path) {
+    return (obj) => {
+      return this.get(obj, Path)
+    }
+  },
+  iteratee: function(predicate) {
+    if(this.isArray(predicate)){
+      return this.matchesProperty(predicate[0], predicate[1])
+    }else if(this.isString(predicate)){
+      return this.Property(predicate)
+    }else if(this.isobject(predicate)){
+      return this.matches(predicate)
+    }else {
+      return predicate
+    }
+  },
+  // equal1: function(a,b){return this.isEqual(a,b)},//this == versionlin7
+  // equal2: function(){return (a,b) => this.isEqual(a,b)},//this == versionlin7
+  // equal3: (a,b)=> this.isEqual(a,b),//this == window
+  //返回对象部分匹配函数
+  // matches : (src) => versionlin7.bind(versionlin7.isMatch, versionlin7, window, src), //"this.bind is not a function"
+  matches: function(source) {
+    return this.bind(this.isMatch, this,window, source)
+  },
+  // matches: function(source) {
+  //   return function(obj) {
+  //     return versionlin7.isMatch(obj,source)
+  //   }
+  // },
+  //参数绑定函数
+  bind: function(f, thisArg, ...fixedArgs){
+    return function(...args){
+      var actualArgs = [...fixedArgs]
+      for(let i = 0; i < actualArgs.length; i++) {
+          if(actualArgs[i] === window) {
+              actualArgs[i] = args.shift()
+            }
+          }
+      actualArgs.push(...args)
+      return f.apply(thisArg, actualArgs)
+    }
+  },
+// versionlin7.matches({x:1})({x:2})
+  // matches: function(source) {
+  //   return this.bind(this.isMatch, window, source)
+  // },
+  // bind: function(f,...fixedArgs){
+  // return function(...args){
+  //   return (...args) => {
+  //     var actualArgs = [...fixedArgs]
+  //     for(let i = 0; i < actualArgs.length; i++) {
+  //       if(actualArgs[i] === window) {
+  //         actualArgs[i] = args.shift()
+  //       }
+  //     }
+  //     actualArgs.push(...args)
+  //     return f.apply(this, actualArgs)
+  //   }
+  // },
+  //对象部分匹配
+  
+  isMatch: function(obj, source) {
+    for(let key in source) {
+      if(!this.isEqual(obj[key], source[key])){
+        return false
+      }
+    }
+    return true
+  },
+  //深对比SameValueZero
+  isEqual: function(n1, n2) {
+    if(this.isFunction(n1) && this.isFunction(n2)){
+      return t1.toString() == t2.toString()
+    }else if(this.isObject(n1) && this.isObject(n2)) {
+      return this.ObjectCompare(n1,n2)
+    }else {
+      return this.sameValueZero(n1,n2)
+    }
+  },
 /**
  * 对象深对比
  * @param   {object}  obj1  [obj1 description]
@@ -811,48 +917,61 @@ var versionlin7 = {
     for(let i = 0; i < a.length; i++) {
       let t1 = obj1[a[i]]
       let t2 = obj2[b[i]]
-      //判断键是否相同
-      // if(this.isObject(a[i])){
-      //   if(!this.ObjectCompare(a[i], b[i])){
-      //     return false
-      //   }
-      // }
       if(a[i] != b[i]){
         return false
       }
-      if(this.isobject(t1) && this.isobject(t2) ){//isobject只判断对象
-        if(this.ObjectCompare(t1, t2)) {
-          continue
-        }else {
-          return false;
-        }
-      }else if(this.isFunction(t1) && this.isFunction(t2)) { //isObject 判断数组和函数
+      if(this.isFunction(t1) && this.isFunction(t2)){
         if(t1.toString() == t2.toString()){
           continue
         }else {
           return false
         }
-      }else if(this.isArray(t1) && this.isArray(t2)) {//判断数组
-        if(t1.toString() == t2.toString()) {
-          if(t1.toString().includes('[object Object]')) {
-            for(let i = 0; i < t1.length; i++) {
-              if(this.isObject(t1[i])){
-                if(this.ObjectCompare(t1[i], t2[i])){
-                  continue
-                }else {
-                  return false
-                }
-              }
-            }
-          }
+      }else if(this.isObject(t1) && this.isObject(t2)) {
+        if(this.ObjectCompare(t1,t2)){
           continue
         }else {
           return false
-        } 
+        }
+      }else {
+         if(this.sameValueZero(t1,t2)){
+           continue
+         }else {
+           return false
+         }
       }
-      if(t1 != t2){
-        return false
-      }
+      // if(this.isobject(t1) && this.isobject(t2) ){//isobject只判断对象
+      //   if(this.ObjectCompare(t1, t2)) {
+      //     continue
+      //   }else {
+      //     return false;
+      //   }
+      // }else if(this.isFunction(t1) && this.isFunction(t2)) { //isObject 判断数组和函数
+      //   if(t1.toString() == t2.toString()){
+      //     continue
+      //   }else {
+      //     return false
+      //   }
+      // }else if(this.isArray(t1) && this.isArray(t2)) {//判断数组
+      //   if(t1.toString() == t2.toString()) {
+      //     if(t1.toString().includes('[object Object]')) {
+      //       for(let i = 0; i < t1.length; i++) {
+      //         if(this.isObject(t1[i])){
+      //           if(this.ObjectCompare(t1[i], t2[i])){
+      //             continue
+      //           }else {
+      //             return false
+      //           }
+      //         }
+      //       }
+      //     }
+      //     continue
+      //   }else {
+      //     return false
+      //   } 
+      // }
+      // if(t1 != t2){
+      //   return false
+      // }
     }
     return true;
   },
@@ -871,37 +990,6 @@ var versionlin7 = {
       return true
     }
     return false
-  },
-  isPredicate: function(array, predicate) {
-      if(this.isFunction(predicate)){
-        for(let i = 0; i < array.length; i++) {
-          if(!predicate(array[i])){
-            return i
-          }
-        }
-      }
-      if(this.isArray(predicate)) {
-        for(let i = 0; i < array.length; i++) {
-          if(array[i][predicate[0]] != predicate[1]){
-            return i
-          }
-        }
-      }
-      if(this.isString(predicate)) {
-        for(let i = 0; i < array.length; i++) {
-          if(!array[i][predicate]){
-            return i
-          }
-        }
-      } 
-      if(this.isobject(predicate)) {
-        for(let i = 0; i < array.length;i++) {
-          if(!this.ObjectCompare(array[i], predicate)){
-            return i
-          }
-        }
-      }
-      return array.length
   },
   //数组值交换
   arySwap: function(ary, a, b) {
