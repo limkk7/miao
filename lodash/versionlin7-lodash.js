@@ -84,7 +84,7 @@ var versionlin7 = {
     //   if(flag) res.push(ary)
     // }
     // return res
-    return loop(array, value)((a,b) => this.sameValueZero(predicate(a),predicate(b)))
+    return this.loop(array, value)((a,b) => this.sameValueZero(predicate(a),predicate(b)))
   },
   /**
    * Creates a slice of array with n elements dropped from the beginning.
