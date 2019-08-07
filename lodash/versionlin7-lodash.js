@@ -25,32 +25,47 @@ var versionlin7 = {
    * @return  {Array}            [Returns the new array of filtered values]
    */
   difference: function(array, ...value) {
-    let ary = []
     let res = array.slice()
-    for (let i = 1; i < arguments.length; i++) {
-      for(let j = 0; j < arguments[i].length ; j++)
-        ary.push(arguments[i][j])
-    }
-    res = res.filter(n => !ary.includes(n))
+    value = [].concat(...value)
+    res = res.filter(n => !value.includes(n))
     return res
   },
 
   differenceWith: function(array, value, comparator)  {
-    let res = []
-    for(let ary of array) {
-      let flag = true
-      for(let val of value) {
-        if(comparator.call(this, ary, val)) {
-          flag = false
-          break
-        }
-      }
-      if(flag) res.push(ary)
-    }
-    return res
+    // let res = []
+    // for(let ary of array) {
+    //   let flag = true
+    //   for(let val of value) {
+    //     if(comparator.call(this, ary, val)) {
+    //       flag = false
+    //       break
+    //     }
+    //   }
+    //   if(flag) res.push(ary)
+    // }
+    // return res
+    return this.loop(array, value, comparator)((comparator) => comparator(ary[i], val[j]))
   },
-
+  loop: function(ary, val, comparator) {
+    return (func)=>{
+      let res = []
+      for(let i = 0; i < ary.length; i++) {
+        let flag = true
+        for(let j = 0; j < val.length; j++) {
+          if(func) {
+            flag = false
+            break
+          }
+        }
+        if(flag) res.push(ary[i])
+      }
+      return res
+    }
+  },
   differenceBy: function(array, ...value) {
+    if(this.isArray(value[value.length - 1])){
+      return this.difference(array, ...value)
+    }
     let predicate = value.pop()
     predicate = this.iteratee(predicate)
     value = [].concat(...value)
@@ -804,7 +819,7 @@ var versionlin7 = {
     }
     return res
   },
-  //Util############################################################################################
+  //Util#############################################################################################################
   curry: function(f, len = f.length) {
       return (...args) =>{
         if(args.length >= len) {
@@ -868,11 +883,11 @@ var versionlin7 = {
   // matches: function(source) {
   //   return this.bind(this.isMatch, this,window, source)
   // },
-  // matches: function(source) {
-  //   return (obj) =>{
-  //     return this.isMatch(obj,source)
-  //   }
-  // },
+  matches: function(source) {
+    return (obj) =>{
+      return this.isMatch(obj,source)
+    }
+  },
   // matches: function(source) {
   //   let a = this
   //   return function(obj) {
