@@ -1,19 +1,19 @@
-var versionlin7 = {
-  tostring: function(value){
+var v = function(){
+  function tostring(value){
     return Object.prototype.toString.call(value)
-  },
+  }
   //创建一个元素数组，这些元素按大小的长度分成组。如果数组不能被平均分割，最后的块将是剩余的元素。
-  chunk: function(ary, size = 1) {
+  function chunk(ary, size = 1) {
     let array = []
     for (let i = 0; i < ary.length; i += size){
       array.push(ary.slice(i, i + size))
     }
     return array
-  },
+  }
   //创建一个删除所有falsey值的数组。值false、null、0、""、undefined和NaN是falsey。
-  compact: function(ary) {
+  function compact(ary) {
     return ary.filter(it => it)
-  },
+  }
   //带With和By的函数重写
   /**
    * [difference description]
@@ -24,7 +24,7 @@ var versionlin7 = {
    *
    * @return  {Array}            [Returns the new array of filtered values]
    */
-  difference: function(array, ...value) {
+  function difference(array, ...value) {
     let ary = []
     let res = array.slice()
     for (let i = 1; i < arguments.length; i++) {
@@ -33,9 +33,9 @@ var versionlin7 = {
     }
     res = res.filter(n => !ary.includes(n))
     return res
-  },
+  }
 
-  differenceWith: function(array, value, comparator)  {
+  function differenceWith(array, value, comparator)  {
     let res = []
     for(let ary of array) {
       let flag = true
@@ -48,9 +48,9 @@ var versionlin7 = {
       if(flag) res.push(ary)
     }
     return res
-  },
+  }
 
-  differenceBy: function(array, ...value) {
+  function differenceBy(array, ...value) {
     let predicate = value.pop()
     predicate = this.iteratee(predicate)
     value = [].concat(...value)
@@ -66,7 +66,7 @@ var versionlin7 = {
       if(flag) res.push(ary)
     }
     return res
-  },
+  }
   /**
    * Creates a slice of array with n elements dropped from the beginning.
    *
@@ -75,13 +75,13 @@ var versionlin7 = {
    *
    * @return  {[Array]}         [return the slice of array]
    */
-  drop: function(array, n = 1) {
+  function drop(array, n = 1) {
     if (n >= array.length) {
       return []
     }else {
       return array.slice(n)
     }
-  },
+  }
   /**
    * Creates a slice of array with n elements dropped from the end
    *
@@ -90,17 +90,17 @@ var versionlin7 = {
    *
    * @return  {Array}         [return the slice of array]
    */
-  dropRight: function(array, n = 1) {
+  function dropRight(array, n = 1) {
     let x = array.length - n
     if(x <= 0) {
       return []
     } else {
       return array.slice(0, x)
     }
-  },
-  dropRightWhile: function(array, predicate){
+  }
+  function dropRightWhile(array, predicate){
     return this.reverse(this.dropWhile(this.reverse(array), predicate))
-  }, 
+  }
   /**
    * [dropWhile description]
    *
@@ -109,7 +109,7 @@ var versionlin7 = {
    *
    * @return  {[type]}             [return description]
    */
-  dropWhile: function(array, predicate) {
+  function dropWhile(array, predicate) {
     predicate = this.iteratee(predicate)
     for(let i = 0; i < array.length; i++) {
       if(!predicate(array[i])){
@@ -117,16 +117,16 @@ var versionlin7 = {
       }
     }
     return array.slice(0)
-  },
+  }
 
-  fill:function(array, value, start = 0, end = array.length){
+  function fill (array, value, start = 0, end = array.length){
     for(let i = start; i < end; i++) {
       array[i] = value
     }
     return array
-  },
+  }  
 
-  findIndex: function(ary, predicate = it => it, fromIdx = 0) {
+  function findIndex(ary, predicate = it => it, fromIdx = 0) {
     let array = ary.slice()
     if(this.isobject(predicate)) {
       for(let i = fromIdx; i < array.length; i++) {
@@ -173,18 +173,18 @@ var versionlin7 = {
       }
       return -1
     }
-  },
+  }
 
-  findLastIndex: function(array, predicate = it => it, fromIdx = array.length - 1) {
+  function findLastIndex(array, predicate = it => it, fromIdx = array.length - 1) {
     let j = array.length - 1 - fromIdx
     let i = this.findIndex(this.reverse(array), predicate, j)
     return i == -1 ? -1 : array.length - 1 - i
-  },
+   }
 
-  flatten: function(array) {
+  function flatten(array) {
     return [].concat(...array)
-  },
-  flattenDeep: function(array) {
+  }  
+  function flattenDeep(array) {
     var res = []
     for(let i = 0; i < array.length; i++) {
       if(this.isArray(array[i])) {
@@ -194,34 +194,34 @@ var versionlin7 = {
       }
     }
     return res
-  },
-  flattenDepth: function(array, depth = 1) {
+  }  
+  function flattenDepth(array, depth = 1) {
     for(let i = 0; i < depth; i++) {
       array = this.flatten(array)
     }
     return array
-  },
+  }  
 //为对象创建自己的可枚举字符串keyed-value对数己的可枚举字符串keyed-value对数组，该数组可由. frompairs使用。如果对象是映射或集合，则返回其条目。
-  toPairs: function(obj) {
+  function toPairs(obj) {
     let res = []
     let key = Object.keys(obj)
     for(let i = 0; i < key.length; i++) {
       res.push([key[i], obj[key[i]]])
     }
     return res
-  },
+  }  
 //toPairs的逆函数;返回由键值对组成的对象。
-  fromPairs: function(array) {
+  function fromPairs(array) {
     let obj = {}
     for(let i = 0; i < array.length; i++) {
       obj[array[i][0]] = array[i][1]
     }
     return obj
-  },
+  }  
 
-  head: function(array) {
+  function head(array) {
     return array[0]
-  },
+  }  
 /**
  *获取数组中第一次出现值的索引，该索引使用SameValueZero进行相等比较。如果fromIndex是负数，则它用作数组末尾的偏移量。
  *
@@ -231,7 +231,7 @@ var versionlin7 = {
  *
  * @return  {number}             return index
  */
-  indexOf: function(array, value, fromIndex = 0) {
+  function indexOf(array, value, fromIndex = 0) {
     if(fromIndex >= 0) {
       for(let i = fromIndex; i < array.length; i++) {
         if(this.sameValueZero(array[i], value)) {
@@ -247,7 +247,7 @@ var versionlin7 = {
       }
       return 1
     }
-  },
+  }  
 /**
  * 获取数组中除最后一个元素外的所有元素。
  *
@@ -255,9 +255,9 @@ var versionlin7 = {
  *
  * @return  {[type]}         [return new array]
  */
-  initial: function(array) {
+  function initial(array) {
     return array.slice(0, array.length - 1)
-  },
+  }  
 
   /**
    * 创建一个包含在所有给定数组中的惟一值的数组，用于相等比较。结果值的顺序和引用由第一个数组决定。
@@ -266,7 +266,7 @@ var versionlin7 = {
    *
    * @return  {[array]}            new array
    */
-  intersection: function(...array) {
+  function intersection(...array) {
     let res = []
     for(let i = 0; i < arguments[0].length; i++) {
       for(let j = 1; j < arguments.length; j++) {
@@ -277,7 +277,7 @@ var versionlin7 = {
       }
     }
     return res
-  },
+  }  
 /**
  * 这个方法接受iteratee，它为每个数组的每个元素调用iteratee来生成比较它们的标准。结果值的顺序和引用由第一个数组决定。
  *
@@ -285,7 +285,7 @@ var versionlin7 = {
  *
  * @return  {array}             new array
  */
-  intersectionBy: function(array,...arrays) {
+  function intersectionBy(array,...arrays) {
     arrays = [].concat(...arrays)
     var iteratee = arrays.pop()
     if(this.isFunction(iteratee)) {
@@ -296,7 +296,7 @@ var versionlin7 = {
         return arrays.map(it => it[iteratee]).includes(val[iteratee])
       })
     }
-  },
+  }  
 /**
  * 类似于_.intersection，接受比较器，比较器被调用以比较数组的元素。结果值的顺序和引用由第一个数组确定。
  *
@@ -305,7 +305,7 @@ var versionlin7 = {
  *
  * @return  {[type]}             [return description]
  */
-  intersectionWith: function(array, ...arrays) {
+  function intersectionWith(array, ...arrays) {
     arrays = [].concat(...arrays)
 
     let comparator = arrays.pop()
@@ -316,9 +316,9 @@ var versionlin7 = {
         }
       }
     })
-  },
+  }  
 
-  join: function(array, separator = ',') {
+  function join(array, separator = ',') {
     let str = ''
     var i
     for(i = 0; i < array.length - 1; i++) {
@@ -326,7 +326,7 @@ var versionlin7 = {
     }
     str += array[i]
     return str
-  },
+  }  
   /**
    * 获得数组的最后一个元素
    *
@@ -334,9 +334,9 @@ var versionlin7 = {
    *
    * @return  {*}         last element of array
    */
-  last:function(array) {
+  function last(array) {
     return array[array.length - 1]
-  },
+  }  
 /**
  * 从后往前扫描数组返回值相等的数组下标
  *
@@ -346,22 +346,22 @@ var versionlin7 = {
  *
  * @return  {number}             [return index of the matched value, else -1]
  */
-  lastIndexOf: function(array, value, fromIndex = array.length - 1) {
+  function lastIndexOf(array, value, fromIndex = array.length - 1) {
     for(let i = fromIndex; i >= 0; i--) {
       if(this.sameValueZero(array[i], value)){
         return i
       }
     }
     return -1
-  },
+  }  
 //返回数组第n个值
-  nth: function(array, n = 0) {
+  function nth(array, n = 0) {
     if(n >= 0) {
       return array[n]
     }else {
       return array[array.length + n]
     }
-  },
+  }  
   /**
    * 移除数组中与给定值相同的元素后，修改原数组返回
    *
@@ -370,7 +370,7 @@ var versionlin7 = {
    *
    * @return  {array}             returns array
    */
-  pull: function(array, ...values) {
+  function pull(array, ...values) {
     for(let i = 0; i < array.length; ) {
       if(values.includes(array[i])){
         this.arySwap(array, i, array.length - 1)
@@ -380,7 +380,7 @@ var versionlin7 = {
       }
     }
     return array
-  },
+  }  
   /**
    * 移除数组中与给定数组中相同的元素后，修改原数组返回
    *
@@ -389,7 +389,7 @@ var versionlin7 = {
    *
    * @return  {array}         [return array]
    */
-  pullAll: function(array, value = []) {
+  function pullAll(array, value = []) {
     for(let i = 0; i < array.length;) {
       if(value.includes(array[i])) {
         this.arySwap(array, i, array.length - 1)
@@ -399,7 +399,7 @@ var versionlin7 = {
       }
     }
     return array
-  },
+  }  
   /**
    * 筛选留下array和value中含有iteratee属性的对象元素，然后去除array中与value相同属性值的元素
    * 对象数组中的指定对象，返回修改后的数组
@@ -410,7 +410,7 @@ var versionlin7 = {
    *
    * @return  {array}            [return array]
    */
-  pullAllBy: function(array, value, iteratee) {
+  function pullAllBy(array, value, iteratee) {
     if(!array || !value) {
       return array
     }
@@ -436,7 +436,7 @@ var versionlin7 = {
       }
     }
     return array
-  },
+  }  
 /**
  * 对array和value调用comparator进行比较，相等则删除array中对应的元素
  *
@@ -446,7 +446,7 @@ var versionlin7 = {
  *
  * @return  {array}              return array
  */
-  pullAllWith: function(array, value, comparator) {
+  function pullAllWith(array, value, comparator) {
     for(let i = 0; i < array.length; ) {
       let flag = false
       for(let v of value) {
@@ -463,7 +463,7 @@ var versionlin7 = {
       }
     }
     return array
-  },
+  }  
   /**
    *反转数组
    *
@@ -471,13 +471,13 @@ var versionlin7 = {
    *
    * @return  {[array]}         [return new array]
    */
-  reverse: function(array) {
+  function reverse(array) {
     let ary = []
     for(let i = array.length - 1; i >= 0; i--) {
       ary.push(array[i])
     }
     return ary
-  },
+  }  
 /**
  * 向一个有序数组中插入一个value，返回这个值插入之后的有序位置。（使用二分查找）
  *不修改原数组
@@ -486,7 +486,7 @@ var versionlin7 = {
  *
  * @return  {number}         [Returns the index at which value should be inserted into array.]
  */
-  sortedIndex: function(array, value) {
+  function sortedIndex(array, value) {
     let left = 0, right = array.length
     while (left < right) {
       let mid = left + Math.floor((right - left) / 2)
@@ -494,7 +494,7 @@ var versionlin7 = {
       else right = mid;
     }
     return right;
-  },
+  }  
 /**
  * 迭代器iteratee迭代每个元素值计算它们的值
  * 这个迭代器调用一个参数value。返回应该被插入后的数组下标。使用二分查找
@@ -505,7 +505,7 @@ var versionlin7 = {
  *
  * @return  {number}            [Returns the index at which value should be inserted into array.]
  */
-  sortedIndexBy: function(array, value, iteratee) {
+  function sortedIndexBy(array, value, iteratee) {
     let left = 0, right = array.length
     if(this.isFunction(iteratee)) {
       while(left < right) {
@@ -522,7 +522,7 @@ var versionlin7 = {
       }
       return right
     }
-  },
+  }  
   /**
    * 在有序数组中使用二分查找目标值
    * 带indexOf的都采用sameValueZero比较
@@ -532,7 +532,7 @@ var versionlin7 = {
    *
    * @return  {[number]}         [return the index of the matched value, else -1]
    */
-  sortedIndexOf: function(array, value) {
+  function sortedIndexOf(array, value) {
     let left = 0, right = array.length;
     while(left < right) {
       let mid = left + Math.floor((right - left) / 2)
@@ -540,8 +540,8 @@ var versionlin7 = {
       else right = mid
     }
     return this.sameValueZero(array[right], value) ? right : -1
-  },
-  sortedLastIndex: function(array, value) {
+  }  
+  function sortedLastIndex(array, value) {
     let left = 0, right = array.length;
     while(left < right) {
       let mid = left + Math.floor((right - left) / 2)
@@ -549,8 +549,8 @@ var versionlin7 = {
       else right = mid
     }
     return right
-  },
-  sortedLastIndexBy: function(array, value, iteratee) {
+  }  
+  function sortedLastIndexBy(array, value, iteratee) {
     let left = 0, right = array.length;
     if(this.isFunction(iteratee)){
       while(left < right) {
@@ -567,8 +567,8 @@ var versionlin7 = {
       }
       return right
     }
-  },
-  sortedLastIndexOf: function(array, value) {
+  }  
+  function sortedLastIndexOf(array, value) {
     let left = 0, right = array.length;
     while(left < right) {
       let mid = left + Math.floor((right - left) / 2);
@@ -576,7 +576,7 @@ var versionlin7 = {
       else right = mid
     }
     return this.sameValueZero(array[right - 1], value) ? right - 1 : -1
-  },
+  }  
   /**
    * 返回新的去重有序数组，使用sameValueZero验证
    *
@@ -584,7 +584,7 @@ var versionlin7 = {
    *
    * @return  {array}         [return new duplicate free array]
    */
-  sortedUniq: function(array) {
+  function sortedUniq(array) {
     let res = [array[0]]
     for(let i = 1; i < array.length; i++) {
       if(!this.sameValueZero(array[i], array[i - 1])){
@@ -592,8 +592,8 @@ var versionlin7 = {
       }
     }
     return res
-  },
-  sortedUniqBy: function(array, iteratee) {
+  }  
+  function sortedUniqBy(array, iteratee) {
     let res = [array[0]]
     for(let i = 1; i < array.length; i++) {
       if(!this.sameValueZero(iteratee(array[i - 1]), iteratee(array[i]))){
@@ -601,22 +601,22 @@ var versionlin7 = {
       }
     }
     return res
-  },
-  tail: function(array) {
+  }  
+  function tail(array) {
     return array.slice(1)
-  },
-  take: function(array, n = 1) {
+  }  
+  function take(array, n = 1) {
     return array.slice(0, n)
-  },
-  takeRight: function(array, n = 1) {
+  }  
+  function takeRight(array, n = 1) {
     if(n >= array.length) return array.slice()
     return array.slice(array.length - n)
-  },
+  }  
   //从array开头开始分割数组，不过是通过predicate控制，直到返回falsey停止。
-  takeRightWhile: function(array, predicate) {
+  function takeRightWhile(array, predicate) {
     return this.reverse(this.takeWhile(this.reverse(array), predicate))
-  },
-  takeWhile: function(array, predicate) {
+  }  
+  function takeWhile(array, predicate) {
     predicate = this.iteratee(predicate)
     for(let i = 0; i < array.length; i++) {
       if(!predicate(array[i])){
@@ -624,7 +624,7 @@ var versionlin7 = {
       }
     }
     return array.slice(0)
-  },
+  }  
   /**
    * 将多个数组中的值进行去重放入新的数组中
    * 
@@ -633,10 +633,10 @@ var versionlin7 = {
    *
    * @return  {array}            return the new array of combined values
    */
-  union: function(...array) {
+  function union(...array) {
     return Array.from(new Set([].concat(...array)))
-  },
-  unionBy: function(...array) {
+  }  
+  function unionBy(...array) {
     let iteratee = array.pop()
     array = [].concat(...array)
     let set = new Set()
@@ -657,8 +657,8 @@ var versionlin7 = {
       }
     }
     return res
-  },
-  unionWith: function(...array) {
+  }  
+  function unionWith(...array) {
     let comparator = array.pop()
     array = [].concat(...array)
     let res = []
@@ -673,9 +673,9 @@ var versionlin7 = {
       if(flag) res.push(array[i])
     }
     return res
-  },
+  }  
   //根据sameValueZero进行数组去重
-  uniq: function(array) {
+  function uniq(array) {
     let res = []
     for(let i = 0; i < array.length; i++) {
       if(!res.includes(array[i])) {
@@ -683,8 +683,8 @@ var versionlin7 = {
       }
     }
     return res
-  },
-  uniqBy:function(array, iteratee) {
+  }  
+  function uniqBy(array, iteratee) {
     let set = new Set()
     let res = []
     if(this.isFunction(iteratee)) {
@@ -703,8 +703,8 @@ var versionlin7 = {
       }
     }
     return res
-  },
-  uniqWith:function(array, comparator) {
+  }  
+  function uniqWith(array, comparator) {
     let res = []
     for(let i = 0; i < array.length; i++) {
       let flag = true
@@ -717,8 +717,8 @@ var versionlin7 = {
       if(flag) res.push(array[i])
     }
     return res
-  },
-  unzip: function(array) {
+  }  
+  function unzip(array) {
     if(arguments.length > 1) return []
     let maxLen = 0
     let res = []
@@ -735,8 +735,8 @@ var versionlin7 = {
     }
     return res
     // return this.zip(...array)
-  },
-  unzipWith: function(array, iteratee) {
+  }  
+  function unzipWith(array, iteratee) {
     if(!this.isFunction(iteratee)){
       return unzip(array)
     }
@@ -757,7 +757,7 @@ var versionlin7 = {
       res.push(a())
     }
     return res
-  },
+  }  
   /**
    * zip(['a'], [1,3,4], [true, false]);
    * return [["a", 1, true], [undefined, 3, false], [undefined, 4, undefined]]
@@ -766,7 +766,7 @@ var versionlin7 = {
    *
    * @return  {[...array]}            [return description]
    */
-  zip: function(...array) {
+  function zip(...array) {
     let res = []
     let maxLen = array[0].length
     for(let val of array) {
@@ -784,8 +784,8 @@ var versionlin7 = {
       }
     }
     return res
-  },
-  zipWith: function(...array) {
+  }  
+  function zipWith(...array) {
     if(!this.isFunction(array[array.length -1])) {
       return this.zip(...array)
     }
@@ -794,32 +794,22 @@ var versionlin7 = {
     for(let i = 0; i < array[0].length; i++) {
       let a = iteratee
       for(let j = 0; j < array.length; j++) {
-      //   a = a.bind(null, array[j][i])
-      // }
-      // res.push(a())
-        if(!this.isFunction(a)) break 
-        a = this.curry(a)(array[j][i])
+        a = a.bind(null, array[j][i]) 
       }
-      res.push(a)
+      res.push(a())
     }
     return res
-  },
+  }  
   //Util############################################################################################
-  curry: function(f, len = f.length) {
-      return (...args) =>{
-        if(args.length >= len) {
-          return f(...args)
-        }else {
-          return this.curry(f.bind(this, ...args), len - args.length)
-        }
-      }
-  },
+  function curry() {
+
+  }  
   //将对象路径字符串转为数组
-  toPath: function(str) {
+  function toPath(str) {
     return str.split(/\.|\[|\]./g)
-  },
+  }  
   //获得对象目标深度的值
-  get: function(obj, Path, defaultValue = null) {
+  function get(obj, Path, defaultValue = null) {
     if(this.isArray(Path)){
       for(let p of Path){
         if(this.isUndefined(obj)){
@@ -828,28 +818,27 @@ var versionlin7 = {
         obj = obj[p]
       }
       return obj
-    }else {
-      let path = this.toPath(Path)
-      for(let i = 0; i < path.length; i++) {
-        if(this.isUndefined(obj)){
-          return defaultValue
-        }
-        obj = obj[path[i]]
-      }
-      return obj
     }
-  },
-  matchesProperty: function(Path, value) {
+    let path = this.toPath(Path)
+    for(let i = 0; i < path.length; i++) {
+      if(this.isUndefined(obj)){
+        return defaultValue
+      }
+      obj = obj[path[i]]
+    }
+    return obj
+  }  
+  function matchesProperty(Path, value) {
     return (obj) => {
       return this.isEqual(this.get(obj, Path), value)
     }
-  },
-  Property: function(Path) {
+  }  
+  function Property(Path) {
     return (obj) => {
       return this.get(obj, Path)
     }
-  },
-  iteratee: function(predicate) {
+  }  
+  function iteratee(predicate) {
     if(this.isArray(predicate)){
       return this.matchesProperty(predicate[0], predicate[1])
     }else if(this.isString(predicate)){
@@ -859,28 +848,22 @@ var versionlin7 = {
     }else {
       return predicate
     }
-  },
-  // equal1: function(a,b){return this.isEqual(a,b)},//this == versionlin7
-  // equal2: function(){return (a,b) => this.isEqual(a,b)},//this == versionlin7
-  // equal3: (a,b)=> this.isEqual(a,b),//this == window
+  }  
+  // function equal1(a,b){return this.isEqual(a,b)}  //this == versionlin7
+  // function equal2(){return (a,b) => this.isEqual(a,b)}  //this == versionlin7
+  // function equal3:(a,b)=> this.isEqual(a,b),//this == window
   //返回对象部分匹配函数
   // matches : (src) => versionlin7.bind(versionlin7.isMatch, versionlin7, window, src), //"this.bind is not a function"
-  // matches: function(source) {
-  //   return this.bind(this.isMatch, this,window, source)
-  // },
-  // matches: function(source) {
-  //   return (obj) =>{
-  //     return this.isMatch(obj,source)
-  //   }
-  // },
-  // matches: function(source) {
-  //   let a = this
+  function matches(source) {
+    return this.bind(this.isMatch, this,window, source)
+  }  
+  // function matches(source) {
   //   return function(obj) {
-  //     return a.isMatch(obj,source)
+  //     return versionlin7.isMatch(obj,source)
   //   }
-  // },
+  // }  
   //参数绑定函数
-  bind: function(f, thisArg, ...fixedArgs){
+  function bind(f, thisArg, ...fixedArgs){
     return function(...args){
       var actualArgs = [...fixedArgs]
       for(let i = 0; i < actualArgs.length; i++) {
@@ -891,12 +874,12 @@ var versionlin7 = {
       actualArgs.push(...args)
       return f.apply(thisArg, actualArgs)
     }
-  },
+  }  
 // versionlin7.matches({x:1})({x:2})
-  // matches: function(source) {
+  // function matches(source) {
   //   return this.bind(this.isMatch, window, source)
-  // },
-  // bind: function(f,...fixedArgs){
+  // }  
+  // function bind(f,...fixedArgs){
   // return function(...args){
   //   return (...args) => {
   //     var actualArgs = [...fixedArgs]
@@ -908,19 +891,19 @@ var versionlin7 = {
   //     actualArgs.push(...args)
   //     return f.apply(this, actualArgs)
   //   }
-  // },
+  // }  
   //对象部分匹配
   
-  isMatch: function(obj, source) {
+  function isMatch(obj, source) {
     for(let key in source) {
       if(!this.isEqual(obj[key], source[key])){
         return false
       }
     }
     return true
-  },
+  }  
   //深对比SameValueZero
-  isEqual: function(n1, n2) {
+  function isEqual(n1, n2) {
     if(this.isFunction(n1) && this.isFunction(n2)){
       return t1.toString() == t2.toString()
     }else if(this.isObject(n1) && this.isObject(n2)) {
@@ -928,7 +911,7 @@ var versionlin7 = {
     }else {
       return this.sameValueZero(n1,n2)
     }
-  },
+  }  
 /**
  * 对象深对比
  * @param   {object}  obj1  [obj1 description]
@@ -936,7 +919,7 @@ var versionlin7 = {
  *
  * @return  {boolean}        [return description]
  */
-  ObjectCompare: function(obj1, obj2) {
+  function ObjectCompare(obj1, obj2) {
     let a = Object.keys(obj1)
     let b = Object.keys(obj2)
     if(a.length != b.length) {
@@ -999,7 +982,7 @@ var versionlin7 = {
       // }
     }
     return true;
-  },
+  }  
 /**
  * +-0相等NaN和NaN相等，不同类型不相等；
  *
@@ -1008,20 +991,20 @@ var versionlin7 = {
  *
  * @return  {boolean}     [return description]
  */
-  sameValueZero: function(x, y) {
+  function sameValueZero(x, y) {
     if(Object.is(x, y)){//+-0不相等 NaN相等
       return true
     }else if(x === y){//NaN不相等 +-0相等
       return true
     }
     return false
-  },
+  }  
   //数组值交换
-  arySwap: function(ary, a, b) {
+  function arySwap(ary, a, b) {
     let tmp = ary[a]
     ary [a] = ary[b]
     ary[b] = tmp
-  },
+  }  
 /**
  * 判断数组中bool类型的值并进行字符串化
  *
@@ -1029,7 +1012,7 @@ var versionlin7 = {
  *
  * @return  {[type]}         [return description]
  */
-  boolInArray: function(value) {
+  function boolInArray(value) {
     if(this.isBoolean(value)) {
       if(value | 0) {
         return 'true'
@@ -1038,38 +1021,38 @@ var versionlin7 = {
       }
     }
     return value
-  },
-  isArray: function(value) {
+  }  
+  function isArray(value) {
     return this.tostring(value) == '[object Array]'
-  },
-  isBoolean: function(value) {
+  }  
+  function isBoolean(value) {
     return this.tostring(value) == '[object Boolean]'
-  },
-  isString: function(value) {
+  }  
+  function isString(value) {
     return this.tostring(value) == '[object String]'
-  },
-  isFunction: function(value) {
+  }  
+  function isFunction(value) {
     return this.tostring(value) == '[object Function]'
-  },
-  isNumber: function(value) {
+  }  
+  function isNumber(value) {
     return this.tostring(value) == '[object Number]'
-  },
-  isObject: function(value) {
+  }  
+  function isObject(value) {
     let type = typeof(value)
     return value != null && (type == 'object' || type == 'function')
-  },
-  isobject: function(value) {
+  }  
+  function isobject(value) {
     return this.tostring(value) == '[object Object]'
-  },
-  isNull: function(value) {
+  }  
+  function isNull(value) {
     return this.tostring(value) == '[object Null]'
-  },
-  isUndefined: function(value) {
+  }  
+  function isUndefined(value) {
     return this.tostring(value) == '[object Undefined]'
-  },
-  isNaN: function(value) {
+  }  
+  function isNaN(value) {
     if(this.isUndefined(value) || this.isNull(value)) return false
     return value.toString() === 'NaN'
-  },
-  
-}
+  }  
+  return {tostring,chunk}
+}()
