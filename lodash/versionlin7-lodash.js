@@ -49,7 +49,7 @@ var versionlin7 = {
     //   } 
     return this.loop(array, value)((a,b) => comparator.call(this,a, b)) 
   },
-  loop: function(ary, val) {
+  doubleLoop: function(ary, val) {
     return (func)=>{
       let res = []
       for(let i = 0; i < ary.length; i++) {
@@ -147,51 +147,13 @@ var versionlin7 = {
 
   findIndex: function(ary, predicate = it => it, fromIdx = 0) {
     let array = ary.slice()
-    if(this.isobject(predicate)) {
-      for(let i = fromIdx; i < array.length; i++) {
-          if(this.ObjectCompare(array[i], predicate)){
-          return i
-          }
+    predicate = this.iteratee(predicate)
+    for(let i = fromIdx; i < array.length; i++) {
+      if(predicate(array[i])) {
+        return i
       }
-      return -1
-    }else if(this.isFunction(predicate)) {
-      for(let i = fromIdx; i < array.length; i++) {
-        if(predicate(array[i])) {
-          return i
-        }
-      }
-      return - 1
-    }else if(this.isArray(predicate)) {
-      for(let i = fromIdx; i < array.length; i++) {
-        if(array[i][predicate[0]] == predicate[1]) {
-          return i
-        }
-      }
-      return -1
-    }else if(this.isString(predicate)) {
-      for(let i = fromIdx; i < array.length; i++) {
-        if(array[i][predicate] || array[i] == predicate) {
-          return i
-        }
-      }
-      return -1
-    }else if(this.isNaN(predicate)){
-      for(let i = fromIdx; i < array.length; i++) {
-        if(this.isNaN(array[i])) {
-          return i
-        }
-      }
-      return -1
-    }else {
-      predicate = this.boolInArray(predicate)
-      for(let i = fromIdx; i < array.length; i++) {
-        array[i] = this.boolInArray(array[i])
-        if(array[i] === predicate) {
-          return i
-        }
-      }
-      return -1
     }
+    return -1
   },
 
   findLastIndex: function(array, predicate = it => it, fromIdx = array.length - 1) {
@@ -287,10 +249,10 @@ var versionlin7 = {
    */
   intersection: function(...array) {
     let res = []
-    for(let i = 0; i < arguments[0].length; i++) {
-      for(let j = 1; j < arguments.length; j++) {
-        if(arguments[j].includes(arguments[0][i])) {
-          res.push(arguments[0][i])
+    for(let i = 0; i < array[0].length; i++) {
+      for(let j = 1; j < array.length; j++) {
+        if(array[j].includes(array[0][i])) {
+          res.push(array[0][i])
           break;
         }
       }
@@ -305,16 +267,14 @@ var versionlin7 = {
  * @return  {array}             new array
  */
   intersectionBy: function(array,...arrays) {
-    arrays = [].concat(...arrays)
-    var iteratee = arrays.pop()
-    if(this.isFunction(iteratee)) {
-      return array.filter((val) => {
-        return arrays.map(it => iteratee(it)).includes(iteratee(val))})
-    }else if(this.isString(iteratee)) {
-      return array.filter((val) => {
-        return arrays.map(it => it[iteratee]).includes(val[iteratee])
-      })
+    if(this.isArray(arrays[arrays.length - 1])){
+      return this.intersection(array, ...arrays)
     }
+    arrays = [].concat(...arrays)
+    var iteratee = this.iteratee(arrays.pop())
+      return array.filter((val) => {
+        return arrays.map(it => iteratee(it)).includes(iteratee(val))
+      })
   },
 /**
  * 类似于_.intersection，接受比较器，比较器被调用以比较数组的元素。结果值的顺序和引用由第一个数组确定。
