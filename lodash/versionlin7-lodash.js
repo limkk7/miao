@@ -32,27 +32,30 @@ var versionlin7 = {
   },
 
   differenceWith: function(array, value, comparator)  {
-    // let res = []
-    // for(let ary of array) {
-    //   let flag = true
-    //   for(let val of value) {
-    //     if(comparator.call(this, ary, val)) {
-    //       flag = false
-    //       break
+    // loop: function(ary, val) {
+    //   return (func)=>{
+    //     let res = []
+    //     for(let i = 0; i < ary.length; i++) {
+    //       let flag = true
+    //       for(let j = 0; j < val.length; j++) {
+    //         if(func(ary[i], val[j])) {
+    //           flag = false
+    //           break
+    //         }
+    //       }
+    //       if(flag) res.push(ary[i])
     //     }
+    //     return res
     //   }
-    //   if(flag) res.push(ary)
-    // }
-    // return res
-    return this.loop(array, value, comparator)((comparator) => comparator(ary[i], val[j]))
+    return this.loop(array, value)((a,b) => comparator.call(this,a, b))
   },
-  loop: function(ary, val, comparator) {
+  loop: function(ary, val) {
     return (func)=>{
       let res = []
       for(let i = 0; i < ary.length; i++) {
         let flag = true
         for(let j = 0; j < val.length; j++) {
-          if(func) {
+          if(func(ary[i], val[j])) {
             flag = false
             break
           }
