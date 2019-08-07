@@ -72,18 +72,19 @@ var versionlin7 = {
     let predicate = value.pop()
     predicate = this.iteratee(predicate)
     value = [].concat(...value)
-    let res = []
-    for(let ary of array) {
-      let flag = true
-      for(let val of value) {
-        if(this.sameValueZero(predicate(ary), predicate(val))){
-          flag = false
-          break
-        }
-      }
-      if(flag) res.push(ary)
-    }
-    return res
+    // let res = []
+    // for(let ary of array) {
+    //   let flag = true
+    //   for(let val of value) {
+    //     if(this.sameValueZero(predicate(ary), predicate(val))){
+    //       flag = false
+    //       break
+    //     }
+    //   }
+    //   if(flag) res.push(ary)
+    // }
+    // return res
+    return loop(array, value)((a,b) => this.sameValueZero(predicate(a),predicate(b)))
   },
   /**
    * Creates a slice of array with n elements dropped from the beginning.
