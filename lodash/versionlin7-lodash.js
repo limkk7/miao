@@ -47,7 +47,7 @@ var versionlin7 = {
     //     }
     //     return res
     //   }
-    return this.loop(array, value)((a,b) => comparator.call(this,a, b))
+    return this.loop(array, value)((a,b) => comparator(a, b))
   },
   loop: function(ary, val) {
     return (func)=>{
