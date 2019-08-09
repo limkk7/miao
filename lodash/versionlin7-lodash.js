@@ -49,7 +49,7 @@ var versionlin7 = {
     //   } 
     return this.loop(array, value)((a,b) => comparator.call(this,a, b)) 
   },
-  doubleLoop: function(ary, val) {
+  loop: function(ary, val) {
     return (func)=>{
       let res = []
       for(let i = 0; i < ary.length; i++) {
