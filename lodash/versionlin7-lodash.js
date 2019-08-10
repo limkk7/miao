@@ -32,6 +32,14 @@ var versionlin7 = {
   },
 
   differenceWith: function(array, value, comparator)  {
+    return array.filter(val => {
+      for(let v of value) {
+        if(comparator(v, val)){
+          return false
+        }
+      }
+      return true
+    })
     // loop: function(ary, val) {
     //   return (func)=>{
     //     let res = []
@@ -47,7 +55,7 @@ var versionlin7 = {
     //     }
     //     return res
     //   } 
-    return this.loop(array, value)((a,b) => comparator.call(this,a, b)) 
+    //return this.loop(array, value)((a,b) => comparator.call(this,a, b)) 
   },
   loop: function(ary, val) {
     return (func)=>{
@@ -72,6 +80,9 @@ var versionlin7 = {
     let predicate = value.pop()
     predicate = this.iteratee(predicate)
     value = [].concat(...value)
+    return array.filter((val) => {
+      return !value.map((v) => predicate(v)).includes(predicate(val))
+    })
     // let res = []
     // for(let ary of array) {
     //   let flag = true
@@ -84,7 +95,7 @@ var versionlin7 = {
     //   if(flag) res.push(ary)
     // }
     // return res
-    return this.loop(array, value)((a,b) => this.sameValueZero(predicate(a),predicate(b)))
+    //return this.loop(array, value)((a,b) => this.sameValueZero(predicate(a),predicate(b)))
   },
   /**
    * Creates a slice of array with n elements dropped from the beginning.
