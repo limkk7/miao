@@ -40,39 +40,23 @@ var versionlin7 = {
       }
       return true
     })
-    // loop: function(ary, val) {
-    //   return (func)=>{
-    //     let res = []
-    //     for(let i = 0; i < ary.length; i++) {
-    //       let flag = true
-    //       for(let j = 0; j < val.length; j++) {
-    //         if(func(ary[i], val[j])) {
-    //           flag = false
-    //           break
-    //         }
-    //       }
-    //       if(flag) res.push(ary[i])
-    //     }
-    //     return res
-    //   } 
-    //return this.loop(array, value)((a,b) => comparator.call(this,a, b)) 
   },
-  loop: function(ary, val) {
-    return (func)=>{
-      let res = []
-      for(let i = 0; i < ary.length; i++) {
-        let flag = true
-        for(let j = 0; j < val.length; j++) {
-          if(func(ary[i], val[j])) {
-            flag = false
-            break
-          }
-        }
-        if(flag) res.push(ary[i])
-      }
-      return res
-    }
-  },
+  // loop: function(ary, val) {
+  //   return (func)=>{
+  //     let res = []
+  //     for(let i = 0; i < ary.length; i++) {
+  //       let flag = true
+  //       for(let j = 0; j < val.length; j++) {
+  //         if(func(ary[i], val[j])) {
+  //           flag = false
+  //           break
+  //         }
+  //       }
+  //       if(flag) res.push(ary[i])
+  //     }
+  //     return res
+  //   }
+  // },
   differenceBy: function(array, ...value) {
     if(this.isArray(value[value.length - 1])){
       return this.difference(array, ...value)
@@ -83,18 +67,6 @@ var versionlin7 = {
     return array.filter((val) => {
       return !value.map((v) => predicate(v)).includes(predicate(val))
     })
-    // let res = []
-    // for(let ary of array) {
-    //   let flag = true
-    //   for(let val of value) {
-    //     if(this.sameValueZero(predicate(ary), predicate(val))){
-    //       flag = false
-    //       break
-    //     }
-    //   }
-    //   if(flag) res.push(ary)
-    // }
-    // return res
     //return this.loop(array, value)((a,b) => this.sameValueZero(predicate(a),predicate(b)))
   },
   /**
@@ -297,7 +269,6 @@ var versionlin7 = {
  */
   intersectionWith: function(array, ...arrays) {
     arrays = [].concat(...arrays)
-
     let comparator = arrays.pop()
     return array.filter(val => {
       for(let i = 0; i < arrays.length; i++) {
@@ -363,8 +334,7 @@ var versionlin7 = {
   pull: function(array, ...values) {
     for(let i = 0; i < array.length; ) {
       if(values.includes(array[i])){
-        this.arySwap(array, i, array.length - 1)
-        array.pop()
+        array.splice(i, 1)
       }else {
         i++
       }
@@ -382,8 +352,7 @@ var versionlin7 = {
   pullAll: function(array, value = []) {
     for(let i = 0; i < array.length;) {
       if(value.includes(array[i])) {
-        this.arySwap(array, i, array.length - 1)
-        array.pop()
+        array.splice(i, 1)
       }else {
         i++
       }
@@ -401,27 +370,14 @@ var versionlin7 = {
    * @return  {array}            [return array]
    */
   pullAllBy: function(array, value, iteratee) {
+    iteratee = this.iteratee(iteratee)
     if(!array || !value) {
       return array
     }
-    let val = value.filter(val => val.hasOwnProperty(iteratee))//筛选出含有iteratee属性的对象数组
     for(let i = 0; i < array.length;) {
-      var flag = false
-      if(!array[i].hasOwnProperty(iteratee)){//不含有iteratee属性的对象删除
-        this.arySwap(array, i, array.length - 1)
-        array.pop()
-        continue
-      }
-      for(let v of val) {//比较array和value中的属性值，相同则删除
-        if(this.sameValueZero(array[i][iteratee], v[iteratee])){
-          array.splice(i, 1)
-          flag = true
-          break
-        }
-      }
-      if(flag) {
-        continue
-      }else {
+      if(value.map(val => iteratee(val)).includes(iteratee(array[i])){
+        array.splice(i, 1)
+      }else{
         i++
       }
     }
@@ -497,21 +453,13 @@ var versionlin7 = {
  */
   sortedIndexBy: function(array, value, iteratee) {
     let left = 0, right = array.length
-    if(this.isFunction(iteratee)) {
+    iteratee = this.iteratee(iteratee)
       while(left < right) {
         let mid = left + Math.floor((right - left) / 2)
         if(iteratee(array[mid]) < iteratee(value)) left = mid + 1
         else right = mid
       }
       return right
-    }else if(this.isString(iteratee)){
-      while(left < right) {
-        let mid = left + Math.floor((right - left) / 2)
-        if(array[mid][iteratee] < value[iteratee]) left = mid + 1
-        else right = mid
-      }
-      return right
-    }
   },
   /**
    * 在有序数组中使用二分查找目标值
