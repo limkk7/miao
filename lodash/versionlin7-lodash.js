@@ -375,7 +375,7 @@ var versionlin7 = {
       return array
     }
     for(let i = 0; i < array.length;) {
-      if(value.map(val => iteratee(val)).includes(iteratee(array[i])){
+      if(value.map(val => iteratee(val)).includes(iteratee(array[i]))) {
         array.splice(i, 1)
       }else{
         i++
