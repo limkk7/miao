@@ -792,7 +792,7 @@ var versionlin7 = {
       if(!map.has(array[i])){
         map.set(array[i], 1)
       }
-      for(let j = i + 1; j < array.length){
+      for(let j = i + 1; j < array.length; j++){
         if(comparator(array[i], array[j])){
           map.set(val, 0)
         }
