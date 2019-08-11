@@ -40,7 +40,7 @@ var v = function(){
     for(let ary of array) {
       let flag = true
       for(let val of value) {
-        if(comparator.call(this, ary, val)) {
+        if(comparator(ary, val)) {
           flag = false
           break
         }
@@ -234,14 +234,14 @@ var v = function(){
   function indexOf(array, value, fromIndex = 0) {
     if(fromIndex >= 0) {
       for(let i = fromIndex; i < array.length; i++) {
-        if(this.sameValueZero(array[i], value)) {
+        if(sameValueZero(array[i], value)) {
           return i
         }
       }
       return -1
     }else {
       for(let i = array.length + fromIndex; i >= 0; i--) {
-        if(this.sameValueZero(array[i], value)) {
+        if(sameValueZero(array[i], value)) {
           return i
         }
       }
@@ -904,12 +904,12 @@ var v = function(){
   }  
   //深对比SameValueZero
   function isEqual(n1, n2) {
-    if(this.isFunction(n1) && this.isFunction(n2)){
+    if(isFunction(n1) && isFunction(n2)){
       return t1.toString() == t2.toString()
-    }else if(this.isObject(n1) && this.isObject(n2)) {
-      return this.ObjectCompare(n1,n2)
+    }else if(isObject(n1) && isObject(n2)) {
+      return ObjectCompare(n1,n2)
     }else {
-      return this.sameValueZero(n1,n2)
+      return sameValueZero(n1,n2)
     }
   }  
 /**
@@ -928,20 +928,20 @@ var v = function(){
     for(let i = 0; i < a.length; i++) {
       let t1 = obj1[a[i]]
       let t2 = obj2[a[i]]
-      if(this.isFunction(t1) && this.isFunction(t2)){
+      if(isFunction(t1) && isFunction(t2)){
         if(t1.toString() == t2.toString()){
           continue
         }else {
           return false
         }
-      }else if(this.isObject(t1) && this.isObject(t2)) {
-        if(this.ObjectCompare(t1,t2)){
+      }else if(isObject(t1) && isObject(t2)) {
+        if(ObjectCompare(t1,t2)){
           continue
         }else {
           return false
         }
       }else {
-         if(this.sameValueZero(t1,t2)){
+         if(sameValueZero(t1,t2)){
            continue
          }else {
            return false
@@ -1013,7 +1013,7 @@ var v = function(){
  * @return  {[type]}         [return description]
  */
   function boolInArray(value) {
-    if(this.isBoolean(value)) {
+    if(isBoolean(value)) {
       if(value | 0) {
         return 'true'
       }else {
@@ -1023,36 +1023,36 @@ var v = function(){
     return value
   }  
   function isArray(value) {
-    return this.tostring(value) == '[object Array]'
+    return tostring(value) == '[object Array]'
   }  
   function isBoolean(value) {
-    return this.tostring(value) == '[object Boolean]'
+    return tostring(value) == '[object Boolean]'
   }  
   function isString(value) {
-    return this.tostring(value) == '[object String]'
+    return tostring(value) == '[object String]'
   }  
   function isFunction(value) {
-    return this.tostring(value) == '[object Function]'
+    return tostring(value) == '[object Function]'
   }  
   function isNumber(value) {
-    return this.tostring(value) == '[object Number]'
+    return tostring(value) == '[object Number]'
   }  
   function isObject(value) {
     let type = typeof(value)
     return value != null && (type == 'object' || type == 'function')
   }  
   function isobject(value) {
-    return this.tostring(value) == '[object Object]'
+    return tostring(value) == '[object Object]'
   }  
   function isNull(value) {
-    return this.tostring(value) == '[object Null]'
+    return tostring(value) == '[object Null]'
   }  
   function isUndefined(value) {
-    return this.tostring(value) == '[object Undefined]'
+    return tostring(value) == '[object Undefined]'
   }  
   function isNaN(value) {
-    if(this.isUndefined(value) || this.isNull(value)) return false
+    if(isUndefined(value) || isNull(value)) return false
     return value.toString() === 'NaN'
   }  
-  return {tostring,chunk}
+  return {tostring,chunk, indexOf, sameValueZero,isEqual,differenceWith}
 }()

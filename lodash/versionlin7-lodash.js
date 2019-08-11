@@ -835,6 +835,22 @@ var versionlin7 = {
     }
     return res
   },
+  //创建一个key-value的对象，key是通过将collection按照iteratee规则迭代得到的，对应的value则是，这个key值出现了N次，value就是N。
+  countBy(collection, iter){
+    let res = {}
+    iter = this.iteratee(iter)
+    for(let col of collection) {
+      let k = iter(col)
+      if(res.hasOwnProperty(k)){
+        res[k]++
+      }else {
+        res[k] = 1
+      }
+    }
+    return res
+  },
+
+
   //Util#############################################################################################################
   curry: function(f, len = f.length) {
       return (...args) =>{
