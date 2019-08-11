@@ -736,8 +736,9 @@ var versionlin7 = {
     for(var ary of array) {
       ary = this.uniq(ary)
     }
-    let ary = [].concat(...array)
-    for(a of ary) {
+  
+    array = [].concat(...array)
+    for(a of array) {
       if(!map.has(a)){ 
         map.set(a, 1)
       }else {
@@ -761,8 +762,8 @@ var versionlin7 = {
     for(let val of array) {
       val = this.uniqBy(val, iteratee)
     }
-    let ary = [].concat(...array)
-    for(let val of ary){
+    array = [].concat(...array)
+    for(let val of array){
       let v = iteratee(val)
       if(map.has(v)){
         map.set(v, [0,val])
