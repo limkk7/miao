@@ -786,17 +786,19 @@ var versionlin7 = {
     let comparator = array.pop()
     let res = []
     for(let ary of array) {
-      ary = this.uniqWith(ary, comparator)
+      ary = this.uniqWith(ary, comparator.bind(this))
     }
     array = [].concat(...array)
     for(let i = 0; i < array.length; i++) {
-      if(!map.has(array[i])){
+      if(!map.has(array[i])&& map.get(array[i]) != 0){
         map.set(array[i], 1)
+        for(let j = i + 1; j < array.length; j++){
+          if(map.get(array[j]) == 0) continue;
+          if(comparator.call(this, array[i], array[j])){
+            map.set(array[i], 0)
+            map.set(array[j], 0)
+          }
       }
-      for(let j = i + 1; j < array.length; j++){
-        if(comparator(array[i], array[j])){
-          map.set(val, 0)
-        }
       }
     }
     map.forEach((val, key) =>{
