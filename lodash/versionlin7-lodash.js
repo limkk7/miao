@@ -798,7 +798,7 @@ var versionlin7 = {
             map.set(array[i], 0)
             map.set(array[j], 0)
           }
-      }
+        }
       }
     }
     map.forEach((val, key) =>{
@@ -808,7 +808,38 @@ var versionlin7 = {
     })
     return res
   },
-
+  zipObject: function(props, value) {
+    let obj = {}
+    for(let i = 0; i < props.length; i++) {
+      obj[props[i]] = value[i]
+    }
+    return obj
+  },
+  zipObjectDeep: function(props, value){
+    let res = {}
+    for(let i = 0; i < props.length; i++){
+      let a = res
+      props[i] = this.toPath(props[i])
+      for(let j = 0; j < props[i].length; j++){
+        if(this.isNaN(+props[i][j + 1])){
+          if(props[i][j + 1] == undefined) {
+            a[props[i][j]] = value[i]
+          }else if(a[props[i][j]] == undefined ){
+            a[props[i][j]] = {}
+          }
+          a = a[props[i][j]]
+        }else {
+          if(props[i][j + 1] == undefined) {
+            a[props[i][j]] = value[i]
+          }else if(a[props[i][j]] == undefined ){
+            a[props[i][j]] = []
+          }
+          a = a[props[i][j]]
+        }
+      }
+    }
+    return res
+  },
   //Util#############################################################################################################
   curry: function(f, len = f.length) {
       return (...args) =>{
