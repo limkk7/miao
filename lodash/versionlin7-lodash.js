@@ -732,18 +732,24 @@ var versionlin7 = {
   },
   xor: function(...array){
     var a = []
-    var newary = []
-    let set = new Set()
+    let newAry = []
+    let map = new Map()
     for(var ary of array) {
       var a = a.concat(this.uniq(ary))
     }
     for(ary of a) {
-      if(!set.has(ary)){ 
-        set.add(ary)
-        newary.push(ary)
+      if(!map.has(ary)){ 
+        map.set(ary, 1)
+      }else {
+        map.set(ary, 0)
       }
     }
-    return newary
+    map.forEach((val, key)=> {
+      if(val == 1){
+        newAry.push(key)
+      }
+    })
+    return newAry
   },
   //Util#############################################################################################################
   curry: function(f, len = f.length) {
