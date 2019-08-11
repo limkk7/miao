@@ -462,7 +462,7 @@ var versionlin7 = {
       return right
   },
   /**
-   * 在有序数组中使用二分查找目标值
+   * 在有序数组中使用二分查找目标值找不到返回-1不插入
    * 带indexOf的都采用sameValueZero比较
    *
    * @param   {array}  array  [sorted array to inspect]
@@ -490,21 +490,13 @@ var versionlin7 = {
   },
   sortedLastIndexBy: function(array, value, iteratee) {
     let left = 0, right = array.length;
-    if(this.isFunction(iteratee)){
+    iteratee = this.iteratee(iteratee)
       while(left < right) {
         let mid = left + Math.floor((right - left) / 2)
         if(iteratee(array[mid]) <= iteratee(value)) left = mid + 1
         else right = mid
       }
       return right
-    }else if(this.isString(iteratee)){
-      while(left < right) {
-        let mid = left + Math.floor((right - left) / 2)
-        if(array[mid][iteratee] <= value[iteratee]) left = mid + 1
-        else right = mid
-      }
-      return right
-    }
   },
   sortedLastIndexOf: function(array, value) {
     let left = 0, right = array.length;
@@ -533,6 +525,7 @@ var versionlin7 = {
   },
   sortedUniqBy: function(array, iteratee) {
     let res = [array[0]]
+    iteratee = this.iteratee(iteratee)
     for(let i = 1; i < array.length; i++) {
       if(!this.sameValueZero(iteratee(array[i - 1]), iteratee(array[i]))){
         res.push(array[i])
@@ -576,24 +569,16 @@ var versionlin7 = {
   },
   unionBy: function(...array) {
     let iteratee = array.pop()
+    iteratee = this.iteratee(iteratee)
     array = [].concat(...array)
     let set = new Set()
     let res = []
-    if(this.isFunction(iteratee)) {
       for(let val of array) {
         if(!set.has(iteratee(val))){
           set.add(iteratee(val))
           res.push(val)
         }
       }
-    }else if(this.isString(iteratee)) {
-      for(let val of array) {
-        if(!set.has(val[iteratee])) {
-          set.add(val[iteratee])
-          res.push(val)
-        }
-      }
-    }
     return res
   },
   unionWith: function(...array) {
@@ -624,22 +609,14 @@ var versionlin7 = {
   },
   uniqBy:function(array, iteratee) {
     let set = new Set()
+    iteratee = this.iteratee(iteratee)
     let res = []
-    if(this.isFunction(iteratee)) {
       for(let val of array) {
         if(!set.has(iteratee(val))){
           set.add(iteratee(val))
           res.push(val)
         }
       }
-    }else if(this.isString(iteratee)) {
-      for(let val of array) {
-        if(!set.has(val[iteratee])) {
-          set.add(val[iteratee])
-          res.push(val)
-        }
-      }
-    }
     return res
   },
   uniqWith:function(array, comparator) {
@@ -741,6 +718,24 @@ var versionlin7 = {
       res.push(a)
     }
     return res
+  },
+  without: function(array,...value) {
+    let ary = array.slice()
+    for(let i = 0; i < ary.length;) {
+      if(value.includes(ary[i])){
+        ary.splice(i, 1)
+      }else {
+        i++
+      }
+    }
+    return ary
+  },
+  xor: function(...array){
+    let a = []
+    for(let ary of array) {
+      a.concat(this.uniq(ary))
+    }
+    return Array.from(new Set(a))
   },
   //Util#############################################################################################################
   curry: function(f, len = f.length) {
