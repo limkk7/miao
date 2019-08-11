@@ -731,9 +731,9 @@ var versionlin7 = {
     return ary
   },
   xor: function(...array){
-    let a = []
-    for(let ary of array) {
-      a.concat(this.uniq(ary))
+    var a = []
+    for(var ary of array) {
+      var a = a.concat(this.uniq(ary))
     }
     return Array.from(new Set(a))
   },
