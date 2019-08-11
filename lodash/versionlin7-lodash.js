@@ -731,17 +731,17 @@ var versionlin7 = {
     return ary
   },
   xor: function(...array){
-    var a = []
     let newAry = []
     let map = new Map()
     for(var ary of array) {
-      var a = a.concat(this.uniq(ary))
+      ary = this.uniq(ary)
     }
-    for(ary of a) {
-      if(!map.has(ary)){ 
-        map.set(ary, 1)
+    let ary = [].concat(...array)
+    for(a of ary) {
+      if(!map.has(a)){ 
+        map.set(a, 1)
       }else {
-        map.set(ary, 0)
+        map.set(a, 0)
       }
     }
     map.forEach((val, key)=> {
@@ -759,7 +759,7 @@ var versionlin7 = {
     let res = []
     iteratee = this.iteratee(array.pop())
     for(let val of array) {
-      val = this.uniq(val)
+      val = this.uniqBy(val, iteratee)
     }
     let ary = [].concat(...array)
     for(let val of ary){
@@ -777,6 +777,35 @@ var versionlin7 = {
     })
     return res
   },
+  xorWith: function(...array) {
+    if(!this.isFunction(this.last(array))) {
+      return [].concat(...array)
+    }
+    let map = new Map()
+    let comparator = array.pop()
+    let res = []
+    for(let ary of array) {
+      ary = this.uniqWith(ary, comparator)
+    }
+    array = [].concat(...array)
+    for(let i = 0; i < array.length; i++) {
+      if(!map.has(array[i])){
+        map.set(array[i], 1)
+      }
+      for(let j = i + 1; j < array.length){
+        if(comparator(array[i], array[j])){
+          map.set(val, 0)
+        }
+      }
+    }
+    map.forEach((val, key) =>{
+      if(val == 1) {
+        res.push(key)
+      }
+    })
+    return res
+  },
+
   //Util#############################################################################################################
   curry: function(f, len = f.length) {
       return (...args) =>{
