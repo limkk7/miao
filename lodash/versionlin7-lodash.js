@@ -732,10 +732,18 @@ var versionlin7 = {
   },
   xor: function(...array){
     var a = []
+    let set = new Set()
     for(var ary of array) {
       var a = a.concat(this.uniq(ary))
     }
-    return Array.from(new Set(a))
+    for(ary of a) {
+      if(set.has(ary)){
+        set.delete(ary)
+      }else {
+        set.add(ary)
+      }
+    }
+    return Array.from(set)
   },
   //Util#############################################################################################################
   curry: function(f, len = f.length) {
