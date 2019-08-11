@@ -751,6 +751,32 @@ var versionlin7 = {
     })
     return newAry
   },
+  xorBy: function(...array){
+    if(this.isArray(this.last(array))){
+      return this.xor(...array)
+    }
+    let map = new Map()
+    let res = []
+    iteratee = this.iteratee(array.pop())
+    for(let val of array) {
+      val = this.uniq(val)
+    }
+    let ary = [].concat(...array)
+    for(let val of ary){
+      let v = iteratee(val)
+      if(map.has(v)){
+        map.set(v, [0,val])
+      }else {
+        map.set(v, [1,val])
+      }
+    }
+    map.forEach((val) =>{
+      if(val[0] == 1) {
+        res.push(val[1])
+      }
+    })
+    return res
+  },
   //Util#############################################################################################################
   curry: function(f, len = f.length) {
       return (...args) =>{
