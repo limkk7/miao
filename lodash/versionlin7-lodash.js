@@ -196,21 +196,16 @@ var versionlin7 = {
  * @return  {number}             return index
  */
   indexOf: function(array, value, fromIndex = 0) {
-    if(fromIndex >= 0) {
-      for(let i = fromIndex; i < array.length; i++) {
-        if(this.sameValueZero(array[i], value)) {
-          return i
-        }
-      }
-      return -1
-    }else {
-      for(let i = array.length + fromIndex; i >= 0; i--) {
-        if(this.sameValueZero(array[i], value)) {
-          return i
-        }
-      }
-      return 1
+    if(fromIndex < 0){
+      fromIndex = array.length + fromIndex
+      if(fromIndex < 0) fromIndex = 0
     }
+    for(let i = fromIndex; i < array.length; i++) {
+      if(this.sameValueZero(array[i], value)) {
+        return i
+      }
+    }
+    return -1
   },
 /**
  * 获取数组中除最后一个元素外的所有元素。
