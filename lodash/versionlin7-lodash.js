@@ -894,7 +894,7 @@ var versionlin7 = {
     let iter = iteratee(predicate)
     let res = []
     for(let ary of array) {
-      res.concat(...iter(ary))
+      res = res.concat(...iter(ary))
     }
     return res
   },
@@ -903,6 +903,14 @@ var versionlin7 = {
     let res = []
     for(let ary of array) {
       res = res.concat(...this.flattenDeep(iter(ary)))
+    }
+    return res
+  },
+  flatMapDepth: function(array, predicate, depth = 1) {
+    let iter = this.iteratee(predicate)
+    let res = []
+    for(let ary of array) {
+      res = res.concat(...this.flattenDepth(iter(ary), depth))
     }
     return res
   },
