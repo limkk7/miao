@@ -910,9 +910,17 @@ var versionlin7 = {
     let iter = this.iteratee(predicate)
     let res = []
     for(let ary of array) {
-      res = res.concat(...this.flattenDepth(iter(ary), depth + 1))
+      res = res.concat(iter(ary))
     }
-    return res
+    return this.flattenDepth(res, depth)
+  },
+  forEach: function(obj, predicate) {
+    let iter = this.iteratee(predicate)
+    let keys = Object.keys(obj)
+    for(let key of keys) {
+      iter(obj[key], key, obj)
+    }
+    return 
   },
   curry: function(f, len = f.length) {
       return (...args) =>{
@@ -929,7 +937,7 @@ var versionlin7 = {
     return str.split(/\.|\[|\]./g)
   },
   //获得对象目标深度的值
-  get: function(obj, Path, defaultValue = null) {
+  get: function(obj, Path, defaultValue = undefined) {
     if(this.isArray(Path)){
       for(let p of Path){
         if(this.isUndefined(obj)){
