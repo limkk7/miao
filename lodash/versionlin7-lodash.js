@@ -725,6 +725,9 @@ var versionlin7 = {
     }
     return ary
   },
+  /**
+   * 创建一个惟一值数组，该值是给定数组的对称差异。结果值的顺序由它们在数组中出现的顺序决定。
+   */
   xor: function(...array){
     let newAry = []
     let map = new Map()
@@ -835,10 +838,11 @@ var versionlin7 = {
     }
     return res
   },
+  //collection######################################################################################################
   //创建一个key-value的对象，key是通过将collection按照iteratee规则迭代得到的，对应的value则是，这个key值出现了N次，value就是N。
-  countBy(collection, iter){
+  countBy: function(collection, iter){
     let res = {}
-    iter = this.iteratee(iter)
+    let iter = this.iteratee(iter)
     for(let col of collection) {
       let k = iter(col)
       if(res.hasOwnProperty(k)){
@@ -849,9 +853,51 @@ var versionlin7 = {
     }
     return res
   },
-
-
-  //Util#############################################################################################################
+  every: function(array, predicate) {
+    let iter = this.iteratee(predicate)
+    for(let ary of array) {
+      if(!iter(ary)) {
+        return false
+      }
+    }
+    return true
+  },
+  filter: function(array, predicate) {
+    let iter = this.iteratee(predicate)
+    let res = []
+    for(let ary of array) {
+      if(iter(ary)) {
+        res.push(ary)
+      }
+    }
+    return res
+  },
+  find: function(array, predicate) {
+    let iter = this.iteratee(predicate)
+    for(let ary of array) {
+      if(iter(ary)) {
+        return ary
+      }
+    }
+    return undefined
+  },
+  findLast: function(array, predicate) {
+    let iter = this.iteratee(predicate)
+    for(let i = array.length - 1; i >= 0; i--) {
+      if(iter(array[i])) {
+        return array[i]
+      }
+    }
+    return undefined
+  },
+  flatMap: function(array, predicate) {
+    let iter = iteratee(predicate)
+    let res = []
+    for(let ary of array) {
+      res.concat(iter(ary))
+    }
+    return res
+  },
   curry: function(f, len = f.length) {
       return (...args) =>{
         if(args.length >= len) {
@@ -861,6 +907,7 @@ var versionlin7 = {
         }
       }
   },
+  //Util#############################################################################################################
   //将对象路径字符串转为数组
   toPath: function(str) {
     return str.split(/\.|\[|\]./g)
