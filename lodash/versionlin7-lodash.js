@@ -840,9 +840,9 @@ var versionlin7 = {
   },
   //collection######################################################################################################
   //创建一个key-value的对象，key是通过将collection按照iteratee规则迭代得到的，对应的value则是，这个key值出现了N次，value就是N。
-  countBy: function(collection, iter){
+  countBy: function(collection, predicate){
     let res = {}
-    let iter = this.iteratee(iter)
+    let iter = this.iteratee(predicate)
     for(let col of collection) {
       let k = iter(col)
       if(res.hasOwnProperty(k)){
@@ -894,7 +894,15 @@ var versionlin7 = {
     let iter = iteratee(predicate)
     let res = []
     for(let ary of array) {
-      res.concat(iter(ary))
+      res.concat(...iter(ary))
+    }
+    return res
+  },
+  flatMapDeep: function(array, predicate) {
+    let iter = this.iteratee(predicate)
+    let res = []
+    for(let ary of array) {
+      res = res.concat(...this.flattenDeep(iter(ary)))
     }
     return res
   },
