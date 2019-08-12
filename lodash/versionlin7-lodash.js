@@ -891,7 +891,7 @@ var versionlin7 = {
     return undefined
   },
   flatMap: function(array, predicate) {
-    let iter = iteratee(predicate)
+    let iter = this.iteratee(predicate)
     let res = []
     for(let ary of array) {
       res = res.concat(...iter(ary))
@@ -910,7 +910,7 @@ var versionlin7 = {
     let iter = this.iteratee(predicate)
     let res = []
     for(let ary of array) {
-      res = res.concat(...this.flattenDepth(iter(ary), depth))
+      res = res.concat(...this.flattenDepth(iter(ary), depth + 1))
     }
     return res
   },
