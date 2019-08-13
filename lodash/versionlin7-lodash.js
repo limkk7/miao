@@ -995,6 +995,14 @@ var versionlin7 = {
     }
     return res
   },
+  keyBy: function(collection, predicate) {
+    let obj = {}
+    let iter = this.iteratee(predicate)
+    for(let object of collection) {
+      obj[iter(object)] = object
+    }
+    return obj
+  },
   curry: function(f, len = f.length) {
       return (...args) =>{
         if(args.length >= len) {
