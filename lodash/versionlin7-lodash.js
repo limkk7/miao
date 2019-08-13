@@ -990,8 +990,9 @@ var versionlin7 = {
    */
   invokeMap: function(collection, path, ...args) {
     let res = []
+    path = this.iteratee(path)
     for(let ary of collection) {
-      if(arguments.length == 0){
+      if(args.length == 0){
         res.push(ary.path())
       }else {
         res.push(path.call(ary, ...args))
