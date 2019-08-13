@@ -926,6 +926,55 @@ var versionlin7 = {
     }
     return obj
   },
+  forEachRight: function(obj, predicate) {
+    let iter = this.iteratee(predicate)
+    let keys = Object.keys(obj)
+    for(let i = keys.length - 1; i >= 0; i--) {
+      iter(obj[keys[i]], keys[i], obj)
+    }
+    return obj
+  },
+  /**
+   * 创建一个对象，key 是 iteratee 遍历 collection(集合) 中的每个元素返回的结果。
+   *  分组值的顺序是由他们出现在 collection(集合) 中的顺序确定的。
+   * 每个键对应的值负责生成 key 的元素组成的数组。
+   *
+   * @param   {[type]}  collection  [collection description]
+   * @param   {[type]}  predicate   [predicate description]
+   *
+   * @return  {[type]}              [return description]
+   */
+  groupBy: function(collection, predicate) {
+    let iter = this.iteratee(predicate)
+    let obj = {}
+    for(let ary of collection) {
+      let x = iter(ary)
+      obj[x] = []
+      obj[x].push(ary)
+    }
+    return obj
+  },
+  /**
+   * 检查 value(值) 是否在 collection(集合) 中。
+   * 如果 collection(集合)是一个字符串，那么检查 value（值，子字符串） 是否在字符串中，
+   *  否则使用 SameValueZero 做等值比较。 如果指定 fromIndex 是负数，
+   * 那么从 collection(集合) 的结尾开始检索。
+   */
+  includes: function(collection, value, fromIndex = 0) {
+    if(fromIndex < 0) fromIndex = fromIndex + collection.length
+    if(this.isString(collection)) {
+      let reg = new RegExp(value)
+      return reg.test(collection.slice(fromIndex))
+    }else {
+      let keys = Object.keys(collection)
+      for(let i = fromIndex; i < keys.length; i++) {
+        if(this.sameValueZero(collection[keys[i]], value)) {
+          return true
+        }
+      }
+    }
+    return false
+  },
   curry: function(f, len = f.length) {
       return (...args) =>{
         if(args.length >= len) {
