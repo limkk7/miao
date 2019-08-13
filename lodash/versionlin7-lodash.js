@@ -864,13 +864,17 @@ var versionlin7 = {
   },
   filter: function(array, predicate) {
     let iter = this.iteratee(predicate)
-    let res = []
-    for(let ary of array) {
-      if(iter(ary)) {
-        res.push(ary)
+    if(this.isFunction(iter)) {
+      let res = []
+      for(let ary of array) {
+        if(iter(ary)) {
+          res.push(ary)
+        }
       }
+      return res
+    }else {
+      return array
     }
-    return res
   },
   find: function(array, predicate) {
     let iter = this.iteratee(predicate)
@@ -908,9 +912,9 @@ var versionlin7 = {
   },
   flatMapDepth: function(array, predicate, depth = 1) {
     let iter = this.iteratee(predicate)
-    let res = []
+    var res = []
     for(let ary of array) {
-      res = res.concat(iter(ary))
+      res.push(iter(ary))
     }
     return this.flattenDepth(res, depth)
   },
@@ -920,7 +924,7 @@ var versionlin7 = {
     for(let key of keys) {
       iter(obj[key], key, obj)
     }
-    return 
+    return obj
   },
   curry: function(f, len = f.length) {
       return (...args) =>{
@@ -1171,6 +1175,9 @@ var versionlin7 = {
   },
   isNumber: function(value) {
     return this.tostring(value) == '[object Number]'
+  },
+  isRegExp: function(value) {
+    return this.tostring(value) == "[object RegExp]" ? true : false
   },
   isObject: function(value) {
     let type = typeof(value)
