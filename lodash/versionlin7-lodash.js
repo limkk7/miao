@@ -991,11 +991,7 @@ var versionlin7 = {
   invokeMap: function(collection, path, ...args) {
     let res = []
     for(let ary of collection) {
-      if(args.length == 0){
-        res.push(eval('ary.path()'))
-      }else {
-        res.push(path.call(ary, ...args))
-      }
+      res.push(path.call(ary, ...args))
     }
     return res
   },
@@ -1006,6 +1002,15 @@ var versionlin7 = {
       obj[iter(object)] = object
     }
     return obj
+  },
+  map: function(collection, predicate) {
+    let iter = this.iteratee(predicate)
+    let keys = Object.keys(collection)
+    let res = []
+    for(let key of keys) {
+      res.push(iter(collection[keys[key]]))
+    }
+    return res
   },
   curry: function(f, len = f.length) {
       return (...args) =>{
