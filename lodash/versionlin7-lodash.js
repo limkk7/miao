@@ -1008,7 +1008,7 @@ var versionlin7 = {
     let keys = Object.keys(collection)
     let res = []
     for(let key of keys) {
-      res.push(iter(collection[keys[key]]))
+      res.push(iter(collection[key], key, collection))
     }
     return res
   },
